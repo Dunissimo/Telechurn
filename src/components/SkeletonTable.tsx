@@ -5,7 +5,7 @@ const SkeletonTable: FC = () => {
     const toRender: ReactNode[] = [];
     for (let i = 0; i < 9; i++) {
       toRender.push(
-        <tr className="skeleton-tbody-tr">
+        <tr key={i} className="skeleton-tbody-tr">
           <td>
             <span></span>
           </td>
