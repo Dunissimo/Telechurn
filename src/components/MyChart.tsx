@@ -17,6 +17,17 @@ import { useColor } from "../utils/hooks/useColor";
 import { Spinner } from "react-bootstrap";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ChartDataLabels,
+  Title,
+  Tooltip,
+  Legend
+);
+
 interface IProps {
   data: IData[] | undefined;
   status: IStatus;
@@ -37,17 +48,6 @@ const MyChart: FC<IProps> = ({ data, status }) => {
       );
     }
   }, [data, isSuccess]);
-
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    ChartDataLabels,
-    Title,
-    Tooltip,
-    Legend
-  );
 
   const colors = percentages.map((_, index) => {
     if (index === 0) return " ";
