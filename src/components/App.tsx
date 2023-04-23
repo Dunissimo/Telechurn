@@ -1,26 +1,35 @@
-import { QueryStatus } from "@reduxjs/toolkit/dist/query";
-import { RequestStatusFlags } from "@reduxjs/toolkit/dist/query/core/apiState";
 import { FC, useEffect, useState } from "react";
 
-import { Stack, Accordion, FormSelect } from "react-bootstrap";
+import { Stack, Accordion, FormSelect, Alert } from "react-bootstrap";
 import { useGetStatisticsQuery } from "../redux/rtk";
+import { IStatus } from "../utils/interfaces";
+import MyChart from "./MyChart";
 import MyTable from "./MyTable";
 import SkeletonTable from "./SkeletonTable";
 
-type TStatus = "pending" | "rejected" | "fulfilled";
+import cohort from "../assets/cohort.png";
 
 const App: FC = () => {
   const [interval, setInterval] = useState(7);
-  const [status, setStatus] = useState<string>("pending");
-
-  const { data, status: apiStatus } = useGetStatisticsQuery({
-    channelId: "aaeb08bd-a5e5-4425-98af-fd53b45f3b0a",
-    interval,
+  const [status, setStatus] = useState<IStatus>({
+    isError: false,
+    isFetching: true,
+    isSuccess: false,
   });
 
+  const { data, isSuccess, isLoading, isError, isFetching } =
+    useGetStatisticsQuery({
+      channelId: "aaeb08bd-a5e5-4425-98af-fd53b45f3b0a",
+      interval,
+    });
+
   useEffect(() => {
-    setStatus(apiStatus as string);
-  }, [apiStatus]);
+    setStatus({
+      isFetching,
+      isError,
+      isSuccess,
+    });
+  }, [isSuccess, isError, isLoading, isFetching]);
 
   const handleChange = (value: number) => {
     setInterval(value);
@@ -67,8 +76,10 @@ const App: FC = () => {
           </FormSelect>
         </Stack>
 
-        {status === "rejected" ? (
-          "Error!"
+        {status.isError ? (
+          <Alert key="danger" variant="danger">
+            При загрузке данных что-то пошло не так
+          </Alert>
         ) : (
           <Stack className="mb-12">
             <Accordion>
@@ -102,7 +113,7 @@ const App: FC = () => {
               </Accordion.Item>
             </Accordion>
 
-            {status === "pending" ? <SkeletonTable /> : <MyTable data={data} />}
+            {status.isFetching ? <SkeletonTable /> : <MyTable data={data} />}
           </Stack>
         )}
 
@@ -126,11 +137,22 @@ const App: FC = () => {
                 <p>
                   ↑ По вертикали сверху – относительное количество подписчиков.
                 </p>
+                <p className="flex items-center gap-2">
+                  <img src={cohort} alt="" className="w-[100px] border" />
+                  Можно нажимать на прямоугольник и номер когорты, чтобы
+                  добавлять/убирать ее из графика
+                </p>
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
 
-          {/* <MyChart />  */}
+          {status.isError ? (
+            <Alert key="danger" variant="danger">
+              При загрузке данных что-то пошло не так
+            </Alert>
+          ) : (
+            <MyChart data={data} status={status} />
+          )}
         </Stack>
       </section>
     </Stack>

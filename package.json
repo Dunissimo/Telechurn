@@ -12,6 +12,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "bootstrap": "^5.2.3",
     "chart.js": "^4.2.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-chartjs-2": "^5.2.0",

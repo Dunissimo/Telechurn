@@ -18,3 +18,9 @@ export interface IUser {
   username: string;
   full_name: string;
 }
+
+export interface IStatus {
+  isSuccess: boolean;
+  isFetching: boolean;
+  isError: boolean;
+}
