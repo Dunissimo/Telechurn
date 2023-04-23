@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { ChartOptions } from "chart.js";
+import { ChartOptions, LineController } from "chart.js";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -22,6 +22,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   ChartDataLabels,
   Title,
   Tooltip,
