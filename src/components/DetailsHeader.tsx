@@ -17,13 +17,13 @@ const DetailsHeader: FC<IProps> = ({}) => {
 
   const renderOptions = () => {
     return datasets.map((datasets: IDataset[], index) => {
-      return datasets.map((_, i, arr) => {
-        let day = useDate("DD.MM", arr[1].date);
+      return datasets.map((dataset, i, arr) => {
+        let day = useDate("DD.MM", dataset.date);
         let { totalUsers, percentage, length, last } = useSummary(arr);
 
         return (
           <option value={day.split(".")[0]} key={index}>
-            {day} 👥{totalUsers} → {last.totalUsers} 📉{percentage} 🕑{length}
+            {day} 👥{totalUsers} → {last.totalUsers} 📉{percentage}% 🕑{length}
           </option>
         );
       });

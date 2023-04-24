@@ -12,6 +12,7 @@ import DetailsHeader from "./DetailsHeader";
 import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
 import { getStatus, setStatus } from "../redux/slices/statusSlice";
 import { getData, setAll } from "../redux/slices/dataSlice";
+import DetailsTable from "./DetailsTable";
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
@@ -183,6 +184,7 @@ const App: FC = () => {
 
       <Stack className="mb-12">
         <DetailsHeader />
+        <DetailsTable />
         {/* <MyDetails data={{ datasets, users }} /> */}
       </Stack>
     </Stack>
