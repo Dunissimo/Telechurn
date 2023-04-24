@@ -26,7 +26,7 @@ const Summary: FC<IProps> = ({ datasets, inline }) => {
     );
   };
 
-  return <>{makeSummary(datasets, inline)}</>;
+  return makeSummary(datasets, inline);
 };
 
 export default Summary;

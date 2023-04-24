@@ -1,5 +1,3 @@
-export interface A {}
-
 export interface IData {
   users: IUser[];
   datasets: IDataset[];

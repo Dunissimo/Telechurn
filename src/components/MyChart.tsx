@@ -51,16 +51,11 @@ const MyChart: FC<IProps> = ({ data, status }) => {
   }, [data, isSuccess]);
 
   const colors = percentages.map((_, index) => {
-    if (index === 0) return " ";
     return useColor(100).randomColor;
   });
 
   const labels = percentages.map((_, index) => {
-    if (index < 1) {
-      return "";
-    }
-
-    return index;
+    return index + 1;
   });
 
   const options: ChartOptions = {
@@ -96,14 +91,12 @@ const MyChart: FC<IProps> = ({ data, status }) => {
       data: percentage.map((percentage) => percentage),
       borderWidth: 4,
       tension: 0.4,
-      borderColor: colors[index + 1],
-      backgroundColor: colors[index + 1],
+      borderColor: colors[index],
+      backgroundColor: colors[index],
       fill: false,
       pointRadius: 0,
     })),
   };
-
-  console.log(labels);
 
   return (
     <div className="mt-4 w-full min-h-[500px] overflow-x-auto text-center">
