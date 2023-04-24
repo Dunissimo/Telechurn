@@ -8,6 +8,7 @@ import MyTable from "./MyTable";
 import SkeletonTable from "./SkeletonTable";
 
 import cohort from "../assets/cohort.png";
+import DetailsHeader from "./DetailsHeader";
 
 const App: FC = () => {
   const [interval, setInterval] = useState(7);
@@ -178,6 +179,7 @@ const App: FC = () => {
       </Stack>
 
       <Stack className="mb-12">
+        <DetailsHeader datasets={datasets} />
         {/* <MyDetails data={{ datasets, users }} /> */}
       </Stack>
     </Stack>
