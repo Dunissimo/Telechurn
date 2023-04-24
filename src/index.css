@@ -4,14 +4,14 @@
 
 html,
 body {
-  overflow-x: hidden;
+  @apply text-[#394e6a] overflow-x-hidden;
 }
 
 .main-table > thead > tr {
   @apply uppercase text-[0.75em];
 }
 .main-table .t-body-rows {
-  @apply text-center text-[#394e6a];
+  @apply text-center;
 }
 .main-table .t-body-rows span {
   @apply w-full;
@@ -22,7 +22,7 @@ body {
 }
 
 .head-td {
-  @apply p-4 bg-[#f2f7ff] text-[#394e6a] font-bold text-center uppercase;
+  @apply p-4 bg-[#f2f7ff] font-bold text-center uppercase;
 }
 .head-td:first-child {
   border-top-left-radius: 10px;

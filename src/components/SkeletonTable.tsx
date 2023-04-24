@@ -2,13 +2,28 @@ import { FC } from "react";
 
 const SkeletonTable: FC = () => {
   const render = () => {
-    const td = new Array(9).fill(
-      <td>
-        <span></span>
-      </td>
-    );
+    const td = [];
 
-    const tr = new Array(9).fill(<tr className="skeleton-tbody-tr">{td}</tr>);
+    for (let i = 0; i < 9; i++) {
+      td.push(
+        <td key={Math.ceil(Math.random() * 10000)}>
+          <span></span>
+        </td>
+      );
+    }
+
+    const tr = [];
+
+    for (let i = 0; i < 9; i++) {
+      tr.push(
+        <tr
+          key={Math.ceil(Math.random() * 10000)}
+          className="skeleton-tbody-tr"
+        >
+          {td}
+        </tr>
+      );
+    }
 
     return tr;
   };
@@ -29,12 +44,7 @@ const SkeletonTable: FC = () => {
             <td className="head-td">День 7</td>
           </tr>
         </thead>
-        <tbody>
-          {render().map((tr) => {
-            console.log(tr);
-            return tr;
-          })}
-        </tbody>
+        <tbody>{render()}</tbody>
       </table>
     </div>
   );

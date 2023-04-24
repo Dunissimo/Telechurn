@@ -7,31 +7,10 @@ import { IData, IDataset, IUser } from "../utils/interfaces";
 import Summary from "./Summary";
 
 interface IProps {
-  data: IData[] | undefined;
+  datasets: IDataset[][];
 }
 
-const MyTable: FC<IProps> = ({ data }) => {
-  const [datasets, setDatasets] = useState<IDataset[][]>([]);
-  const [users, setUsers] = useState<IUser[][]>([]);
-
-  useEffect(() => {
-    const allDatasets: IDataset[][] = [];
-    const allUsers: IUser[][] = [];
-
-    data?.forEach((data: IData) => {
-      allDatasets.push(data.datasets);
-      allUsers.push(data.users);
-    });
-
-    if (allDatasets.length > 0) {
-      setDatasets(allDatasets);
-    }
-
-    if (allUsers.length > 0) {
-      setUsers(allUsers);
-    }
-  }, [data]);
-
+const MyTable: FC<IProps> = ({ datasets }) => {
   const days: ReactNode[] = datasets.map((_, i) => (
     <td className="head-td" key={i + 1}>
       День {i + 1}

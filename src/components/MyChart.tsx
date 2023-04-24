@@ -12,7 +12,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { ChartData } from "chart.js";
-import { IData, IStatus } from "../utils/interfaces";
+import { IData, IDataset, IStatus } from "../utils/interfaces";
 import { useColor } from "../utils/hooks/useColor";
 import { Spinner } from "react-bootstrap";
 import ChartDataLabels from "chartjs-plugin-datalabels";
@@ -30,7 +30,7 @@ ChartJS.register(
 );
 
 interface IProps {
-  data: IData[] | undefined;
+  data: IDataset[][];
   status: IStatus;
 }
 
@@ -41,8 +41,8 @@ const MyChart: FC<IProps> = ({ data, status }) => {
   useEffect(() => {
     if (isSuccess) {
       setPercentages(
-        data!.map((data: IData) => {
-          return data.datasets.map((dataset) => {
+        data.map((datasets: IDataset[]) => {
+          return datasets.map((dataset) => {
             return dataset.percentage;
           });
         })

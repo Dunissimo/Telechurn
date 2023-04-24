@@ -11,8 +11,8 @@ export interface IDataset {
 }
 
 export interface IUser {
-  joined_date: Date;
-  left_date: Date | null;
+  joined_date: string;
+  left_date: string | null;
   username: string;
   full_name: string;
 }
