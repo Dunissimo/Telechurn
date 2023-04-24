@@ -34,9 +34,9 @@ const App: FC = () => {
   useEffect(() => {
     dispatch(
       setStatus({
-        isFetching,
-        isError,
-        isSuccess,
+        isFetching: apiFetching,
+        isError: apiError,
+        isSuccess: apiSuccess,
       })
     );
   }, [apiSuccess, apiError, apiFetching]);
