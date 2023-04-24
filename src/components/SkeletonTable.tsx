@@ -1,43 +1,16 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 
 const SkeletonTable: FC = () => {
   const render = () => {
-    const toRender: ReactNode[] = [];
-    for (let i = 0; i < 9; i++) {
-      toRender.push(
-        <tr key={i} className="skeleton-tbody-tr">
-          <td>
-            <span></span>
-          </td>
-          <td>
-            <span></span>
-          </td>
-          <td>
-            <span></span>
-          </td>
-          <td>
-            <span></span>
-          </td>
-          <td>
-            <span></span>
-          </td>
-          <td>
-            <span></span>
-          </td>
-          <td>
-            <span></span>
-          </td>
-          <td>
-            <span></span>
-          </td>
-          <td>
-            <span></span>
-          </td>
-        </tr>
-      );
-    }
+    const td = new Array(9).fill(
+      <td>
+        <span></span>
+      </td>
+    );
 
-    return toRender;
+    const tr = new Array(9).fill(<tr className="skeleton-tbody-tr">{td}</tr>);
+
+    return tr;
   };
 
   return (
@@ -56,7 +29,12 @@ const SkeletonTable: FC = () => {
             <td className="head-td">День 7</td>
           </tr>
         </thead>
-        <tbody>{render()}</tbody>
+        <tbody>
+          {render().map((tr) => {
+            console.log(tr);
+            return tr;
+          })}
+        </tbody>
       </table>
     </div>
   );
