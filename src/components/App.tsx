@@ -8,7 +8,6 @@ import MyTable from "./MyTable";
 import SkeletonTable from "./SkeletonTable";
 
 import cohort from "../assets/cohort.png";
-import MyDetails from "./MyDetails";
 
 const App: FC = () => {
   const [interval, setInterval] = useState(7);
@@ -179,17 +178,7 @@ const App: FC = () => {
       </Stack>
 
       <Stack className="mb-12">
-        <Stack direction="horizontal">
-          <h2 className="w-1/2 text-xl">Подробные события в когорте</h2>
-          <FormSelect className="w-auto ms-auto">
-            <option>17.04 👥100 → 36 📉36% 🕒7</option>
-            <option>18.04 👥189 → 63 📉33% 🕒6</option>
-            <option>19.04 👥125 → 60 📉48% 🕒5</option>
-          </FormSelect>
-          {/* TODO: убрать хард код */}
-        </Stack>
-
-        <MyDetails data={{ datasets, users }} />
+        {/* <MyDetails data={{ datasets, users }} /> */}
       </Stack>
     </Stack>
   );

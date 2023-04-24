@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { IDataset } from "../utils/interfaces";
+import { useSummary } from "../utils/hooks/useSummary";
 
 interface IProps {
   datasets: IDataset[];
@@ -8,10 +9,7 @@ interface IProps {
 
 const Summary: FC<IProps> = ({ datasets, inline }) => {
   const makeSummary = (datasets: IDataset[], inline = false) => {
-    const totalUsers = datasets[0].totalUsers;
-    const last = datasets.slice(-1)[0];
-    const length = datasets.length - 1;
-    const percentage = last.percentage;
+    const { totalUsers, last, percentage, length } = useSummary(datasets);
 
     return (
       <>
