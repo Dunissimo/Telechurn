@@ -16,6 +16,7 @@ import { IData, IDataset, IStatus } from "../utils/interfaces";
 import { useColor } from "../utils/hooks/useColor";
 import { Spinner } from "react-bootstrap";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { getStatus } from "../redux/slices/statusSlice";
 
 ChartJS.register(
   CategoryScale,
@@ -31,11 +32,10 @@ ChartJS.register(
 
 interface IProps {
   data: IDataset[][];
-  status: IStatus;
 }
 
-const MyChart: FC<IProps> = ({ data, status }) => {
-  const { isSuccess, isFetching } = status;
+const MyChart: FC<IProps> = ({ data }) => {
+  const { isSuccess, isFetching } = useAppSelector(getStatus);
   const [percentages, setPercentages] = useState<number[][]>([]);
 
   useEffect(() => {

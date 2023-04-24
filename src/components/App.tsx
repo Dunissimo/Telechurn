@@ -9,29 +9,37 @@ import SkeletonTable from "./SkeletonTable";
 
 import cohort from "../assets/cohort.png";
 import DetailsHeader from "./DetailsHeader";
+import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
+import { getStatus, setStatus } from "../redux/slices/statusSlice";
 
 const App: FC = () => {
+  const dispatch = useAppDispatch();
+  const { isError, isFetching, isSuccess } = useAppSelector(getStatus);
+
   const [interval, setInterval] = useState(7);
-  const [status, setStatus] = useState<IStatus>({
-    isError: false,
-    isFetching: true,
-    isSuccess: false,
-  });
+
   const [datasets, setDatasets] = useState<IDataset[][]>([]);
   const [users, setUsers] = useState<IUser[][]>([]);
 
-  const { data, isSuccess, isError, isFetching } = useGetStatisticsQuery({
+  const {
+    data,
+    isSuccess: apiSuccess,
+    isError: apiError,
+    isFetching: apiFetching,
+  } = useGetStatisticsQuery({
     channelId: "aaeb08bd-a5e5-4425-98af-fd53b45f3b0a",
     interval,
   });
 
   useEffect(() => {
-    setStatus({
-      isFetching,
-      isError,
-      isSuccess,
-    });
-  }, [isSuccess, isError, isFetching]);
+    dispatch(
+      setStatus({
+        isFetching,
+        isError,
+        isSuccess,
+      })
+    );
+  }, [apiSuccess, apiError, apiFetching]);
 
   const formatData = (data: IData[] | undefined) => {
     if (!data || data.length === 0) {
@@ -95,7 +103,7 @@ const App: FC = () => {
         </FormSelect>
       </Stack>
 
-      {status.isError ? (
+      {isError ? (
         <Alert key="danger" variant="danger">
           При загрузке данных что-то пошло не так
         </Alert>
@@ -132,11 +140,7 @@ const App: FC = () => {
             </Accordion.Item>
           </Accordion>
 
-          {status.isFetching ? (
-            <SkeletonTable />
-          ) : (
-            <MyTable datasets={datasets} />
-          )}
+          {isFetching ? <SkeletonTable /> : <MyTable datasets={datasets} />}
         </Stack>
       )}
 
@@ -169,12 +173,12 @@ const App: FC = () => {
           </Accordion.Item>
         </Accordion>
 
-        {status.isError ? (
+        {isError ? (
           <Alert key="danger" variant="danger">
             При загрузке данных что-то пошло не так
           </Alert>
         ) : (
-          <MyChart data={datasets} status={status} />
+          <MyChart data={datasets} />
         )}
       </Stack>
 
