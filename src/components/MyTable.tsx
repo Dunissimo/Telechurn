@@ -5,12 +5,16 @@ import { useColor } from "../utils/hooks/useColor";
 import { useDate } from "../utils/hooks/useDate";
 import { IData, IDataset, IUser } from "../utils/interfaces";
 import Summary from "./Summary";
+import { getData } from "../redux/slices/dataSlice";
+import { useAppSelector } from "../utils/hooks/redux";
 
 interface IProps {
-  datasets: IDataset[][];
+  // datasets: IDataset[][];
 }
 
-const MyTable: FC<IProps> = ({ datasets }) => {
+const MyTable: FC<IProps> = ({}) => {
+  const { datasets } = useAppSelector(getData);
+
   const days: ReactNode[] = datasets.map((_, i) => (
     <td className="head-td" key={i + 1}>
       День {i + 1}

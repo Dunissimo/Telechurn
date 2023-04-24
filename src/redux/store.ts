@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { api } from "./rtk";
 import { statusReducer } from "./slices/statusSlice";
+import { dataReducer } from "./slices/dataSlice";
 
 export const store = configureStore({
   reducer: {
     status: statusReducer,
+    data: dataReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>

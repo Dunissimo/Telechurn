@@ -3,12 +3,16 @@ import { FormSelect, Stack } from "react-bootstrap";
 import { IDataset } from "../utils/interfaces";
 import { useSummary } from "../utils/hooks/useSummary";
 import { useDate } from "../utils/hooks/useDate";
+import { getData } from "../redux/slices/dataSlice";
+import { useAppSelector } from "../utils/hooks/redux";
 
 interface IProps {
-  datasets: IDataset[][];
+  // datasets: IDataset[][];
 }
 
-const DetailsHeader: FC<IProps> = ({ datasets }) => {
+const DetailsHeader: FC<IProps> = ({}) => {
+  const { datasets } = useAppSelector(getData);
+
   const [day, setDay] = useState(17);
 
   const renderOptions = () => {

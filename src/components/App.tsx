@@ -11,15 +11,15 @@ import cohort from "../assets/cohort.png";
 import DetailsHeader from "./DetailsHeader";
 import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
 import { getStatus, setStatus } from "../redux/slices/statusSlice";
+import { getData, setAll } from "../redux/slices/dataSlice";
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
   const { isError, isFetching, isSuccess } = useAppSelector(getStatus);
-
   const [interval, setInterval] = useState(7);
 
-  const [datasets, setDatasets] = useState<IDataset[][]>([]);
-  const [users, setUsers] = useState<IUser[][]>([]);
+  // const [datasets, setDatasets] = useState<IDataset[][]>([]);
+  // const [users, setUsers] = useState<IUser[][]>([]);
 
   const {
     data,
@@ -55,8 +55,7 @@ const App: FC = () => {
   useEffect(() => {
     const { datasets, users } = formatData(data);
 
-    setDatasets(datasets);
-    setUsers(users);
+    dispatch(setAll({ datasets, users }));
   }, [data]);
 
   const handleChange = (value: number) => {
@@ -140,7 +139,7 @@ const App: FC = () => {
             </Accordion.Item>
           </Accordion>
 
-          {isFetching ? <SkeletonTable /> : <MyTable datasets={datasets} />}
+          {isFetching ? <SkeletonTable /> : <MyTable />}
         </Stack>
       )}
 
@@ -178,12 +177,12 @@ const App: FC = () => {
             При загрузке данных что-то пошло не так
           </Alert>
         ) : (
-          <MyChart data={datasets} />
+          <MyChart />
         )}
       </Stack>
 
       <Stack className="mb-12">
-        <DetailsHeader datasets={datasets} />
+        <DetailsHeader />
         {/* <MyDetails data={{ datasets, users }} /> */}
       </Stack>
     </Stack>
