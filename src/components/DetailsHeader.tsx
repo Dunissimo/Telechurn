@@ -3,8 +3,8 @@ import { FormSelect, Stack } from "react-bootstrap";
 import { IDataset } from "../utils/interfaces";
 import { useSummary } from "../utils/hooks/useSummary";
 import { useDate } from "../utils/hooks/useDate";
-import { getData } from "../redux/slices/dataSlice";
-import { useAppSelector } from "../utils/hooks/redux";
+import { getData, setCurrentIndex } from "../redux/slices/dataSlice";
+import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
 import { getStatus } from "../redux/slices/statusSlice";
 
 interface IProps {
@@ -12,10 +12,9 @@ interface IProps {
 }
 
 const DetailsHeader: FC<IProps> = ({}) => {
+  const dispatch = useAppDispatch();
   const { isFetching } = useAppSelector(getStatus);
   const { datasets } = useAppSelector(getData);
-
-  const [day, setDay] = useState(17);
 
   const renderOptions = () => {
     return datasets.map((datasets: IDataset[], index) => {
@@ -24,7 +23,7 @@ const DetailsHeader: FC<IProps> = ({}) => {
         let { totalUsers, percentage, length, last } = useSummary(arr);
 
         return (
-          <option value={day.split(".")[0]} key={index}>
+          <option value={index} key={index}>
             {day} 👥{totalUsers} → {last.totalUsers} 📉{percentage}% 🕑{length}
           </option>
         );
@@ -33,7 +32,7 @@ const DetailsHeader: FC<IProps> = ({}) => {
   };
 
   const handleChange = (value: number) => {
-    setDay(value);
+    dispatch(setCurrentIndex(value));
   };
 
   return (

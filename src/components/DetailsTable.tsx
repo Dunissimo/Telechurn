@@ -1,124 +1,154 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import { useAppSelector } from "../utils/hooks/redux";
-import { getData } from "../redux/slices/dataSlice";
-import { IUser } from "../utils/interfaces";
+import { getCurrentIndex, getData } from "../redux/slices/dataSlice";
 import { useDate } from "../utils/hooks/useDate";
 import { useDuration } from "../utils/hooks/useDurations";
-import { addListener } from "@reduxjs/toolkit";
+import { IDataset, IUser } from "../utils/interfaces";
+
+function getDayFromDate(
+  datasets: IDataset[][],
+  currentIndex: number | undefined,
+  dateString: string
+) {
+  // create Date objects from the input strings
+  const dateParts = dateString.split("/");
+  const dateObject = new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0]);
+  const startingDay = datasets[currentIndex ? currentIndex : 0][1].date;
+  const startingDayObject = new Date(startingDay);
+
+  // calculate the difference in days between the two dates
+  const oneDay = 24 * 60 * 60 * 1000; // number of milliseconds in a day
+  const diffDays = Math.round(
+    Math.abs((dateObject.getTime() - startingDayObject.getTime()) / oneDay)
+  );
+
+  return `День ${diffDays + 1}`;
+}
+
+const createRow = (user: IUser) => {
+  const { full_name, username, joined_date, left_date } = user;
+  const name = username ? (
+    <>
+      {full_name}{" "}
+      <a
+        className="underline"
+        target="_blank"
+        href={`https://t.me/${username}`}
+      >
+        @{username}
+      </a>
+    </>
+  ) : (
+    full_name
+  );
+
+  return (
+    <tr>
+      <td className="h-8 w-[50vw] truncate">{name}</td>
+      <td className="h-8">✅ {useDate("HH:mm DD.MM.YYYY", joined_date)}</td>
+      <td className="h-8">
+        {left_date ? `🔻 ${useDate("HH:mm", left_date)}` : "-"}
+      </td>
+      <td className="h-8 w-[20vw]">
+        {left_date
+          ? useDuration(+new Date(left_date) - +new Date(joined_date))
+          : "-"}
+      </td>
+    </tr>
+  );
+};
 
 const DetailsTable: FC = () => {
   const { datasets, users } = useAppSelector(getData);
-  const [isFull, setIsFull] = useState(false);
-  const [stateDay, setDay] = useState<number[]>([0]);
-  const [arr, setArr] = useState<ReactNode[]>([]);
+  const currentIndex = useAppSelector(getCurrentIndex);
 
-  const renderTable = (): ReactNode[] => {
-    const days: number[] = [];
-    const dates: string[] = [];
+  const [isFull, setFull] = useState(false);
+  const [daysToShow, setDays] = useState<number[]>([0]);
 
-    datasets.forEach((datasets, i) => {
-      days.push(i + 1);
-      dates.push(useDate("DD.MM.YYYY", datasets[1].date));
+  const days: any[] = [];
+  const headerDays: any[] = [];
+  const currentUsers = users[currentIndex!];
+  const datesSet: Set<string> = new Set();
+
+  currentUsers.forEach((user) => {
+    if (user.left_date) {
+      const dateString = useDate("DD/MM/YYYY", user.left_date);
+
+      if (!datesSet.has(dateString)) {
+        datesSet.add(dateString);
+      }
+    }
+  });
+
+  const uniqueDates = Array.from(datesSet).sort((a, b) => {
+    const dateA = new Date(a.split("/").reverse().join("-")).getTime();
+    const dateB = new Date(b.split("/").reverse().join("-")).getTime();
+    return dateA - dateB;
+  });
+
+  uniqueDates.forEach((date) => {
+    const rows: any[] = [];
+
+    headerDays.push(getDayFromDate(datasets, currentIndex, date));
+
+    currentUsers
+      .filter(
+        (user) =>
+          useDate("DD/MM/YYYY", user.left_date ? user.left_date : "-") === date
+      )
+      .forEach((user) => {
+        rows.push(createRow(user));
+      });
+
+    days.push({ date, rows });
+  });
+
+  currentUsers
+    .filter((user) => user.left_date == null)
+    .forEach((user) => {
+      days[0].rows.push(createRow(user));
     });
 
-    if (users.length < 1) return [<h1 key={"123333"}>ERROR</h1>];
+  const isMore = daysToShow.at(-1)! + 1 >= datasets.length;
 
-    const sortByLeftDate = (a: IUser, b: IUser) => {
-      if (a.left_date && !b.left_date) return -1;
-      else if (!a.left_date && b.left_date) return 1;
-      else return 0;
-    };
+  const handleClick = () => {
+    if (!isFull) {
+      setFull(true);
+      return;
+    }
 
-    return days.map((day, i) => (
-      <div key={i + "123"}>
-        <div className="mt-12 mb-6">
-          <p className="text-xl">
-            <span className="font-bold">День {day}</span>, {dates[i]}
-          </p>
-        </div>
-        <table className="w-full text-lg">
-          <thead>
-            <tr>
-              <td className="underline pb-6">Полное имя и никнейм</td>
-              <td className="underline pb-6">Когда пришли</td>
-              <td className="underline pb-6">Когда ушли</td>
-              <td className="underline pb-6 w-1/5">
-                Сколько были подписчиками
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            {users[i]
-              .slice(0, isFull ? Infinity : 15)
-              .sort(sortByLeftDate)
-              .map((user) => {
-                const { full_name, username, left_date, joined_date } = user;
-                const name = username ? (
-                  <>
-                    {full_name}
-                    <a
-                      className="underline"
-                      target="_blank"
-                      href="https://t.me/${username}"
-                    >
-                      @{username}
-                    </a>
-                  </>
-                ) : (
-                  full_name
-                );
+    setDays((state) => {
+      if (isMore) return state;
 
-                const leftDate = left_date ? useDate("HH:mm", left_date) : "-";
-                const duration = left_date
-                  ? useDuration(+new Date(left_date) - +new Date(joined_date))
-                  : "-";
-                const joinedDate = `✅ ${useDate(
-                  "HH:mm DD.MM.YYYYY",
-                  joined_date
-                )}`;
-
-                return (
-                  <tr key={Math.random() * 1000} className="h-8">
-                    <td className="flex max-w-[40vw] w-[20vw] truncate">
-                      <span className="truncate"> {name}</span>
-                    </td>
-                    <td>{joinedDate}</td>
-                    <td>🔻 {leftDate}</td>
-                    <td>{duration}</td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
-      </div>
-    ));
+      return [...state, state.at(-1)! + 1];
+    });
   };
 
-  useEffect(() => {
-    setArr(renderTable());
-  }, [users, datasets, isFull]);
+  // TODO: optimize it, remove re-renders!
 
-  const a = stateDay.at(-1)! + 1 >= datasets.length;
   return (
-    <div className="flex flex-col">
-      {stateDay.map((day) => arr[day])}
-      <button
-        disabled={a}
-        className="button"
-        onClick={() => {
-          if (!isFull) {
-            setIsFull(true);
-            return;
-          }
+    <div className="text-lg flex flex-col">
+      {days.map((day: { date: string; rows: ReactNode[] }, i) => {
+        return (
+          <table className="w-full mt-12">
+            <thead>
+              <tr>
+                <td className="pb-12">
+                  <b>{headerDays[i]},</b>
+                  {day.date}
+                </td>
+                <td className="underline pb-12">Когда пришли</td>
+                <td className="underline pb-12">Когда ушли</td>
+                <td className="underline pb-12">Сколько были подписчиками</td>
+              </tr>
+            </thead>
+            <tbody>{day.rows}</tbody>
+          </table>
+        );
+      })}
 
-          setDay((state) => {
-            if (a) return state;
-
-            return [...state, state.at(-1)! + 1];
-          });
-        }}
-      >
-        {a ? "На этом все" : "Показать еще"}
+      <button className="button" onClick={handleClick} disabled={isMore}>
+        {isMore ? "Больше нет данных" : "Показать еще"}
       </button>
     </div>
   );

@@ -11,7 +11,7 @@ import cohort from "../assets/cohort.png";
 import DetailsHeader from "./DetailsHeader";
 import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
 import { getStatus, setStatus } from "../redux/slices/statusSlice";
-import { setDatasets, setUsers } from "../redux/slices/dataSlice";
+import { setData, setDatasets, setUsers } from "../redux/slices/dataSlice";
 import DetailsTable from "./DetailsTable";
 import Footer from "./Footer";
 
@@ -54,8 +54,7 @@ const App: FC = () => {
   useEffect(() => {
     const { datasets, users } = formatData(data);
 
-    dispatch(setDatasets(datasets));
-    dispatch(setUsers(users));
+    dispatch(setData({ datasets, users }));
   }, [data]);
 
   const handleChange = (value: number) => {
