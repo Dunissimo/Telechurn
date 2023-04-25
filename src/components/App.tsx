@@ -11,16 +11,13 @@ import cohort from "../assets/cohort.png";
 import DetailsHeader from "./DetailsHeader";
 import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
 import { getStatus, setStatus } from "../redux/slices/statusSlice";
-import { getData, setAll } from "../redux/slices/dataSlice";
+import { setDatasets, setUsers } from "../redux/slices/dataSlice";
 import DetailsTable from "./DetailsTable";
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
   const { isError, isFetching, isSuccess } = useAppSelector(getStatus);
   const [interval, setInterval] = useState(7);
-
-  // const [datasets, setDatasets] = useState<IDataset[][]>([]);
-  // const [users, setUsers] = useState<IUser[][]>([]);
 
   const {
     data,
@@ -56,7 +53,8 @@ const App: FC = () => {
   useEffect(() => {
     const { datasets, users } = formatData(data);
 
-    dispatch(setAll({ datasets, users }));
+    dispatch(setDatasets(datasets));
+    dispatch(setUsers(users));
   }, [data]);
 
   const handleChange = (value: number) => {
@@ -184,7 +182,7 @@ const App: FC = () => {
 
       <Stack className="mb-12">
         <DetailsHeader />
-        <DetailsTable />
+        {isFetching ? <SkeletonTable withHead={false} /> : <DetailsTable />}
         {/* <MyDetails data={{ datasets, users }} /> */}
       </Stack>
     </Stack>

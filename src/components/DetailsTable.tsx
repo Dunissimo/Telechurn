@@ -1,59 +1,48 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { useAppSelector } from "../utils/hooks/redux";
 import { getData } from "../redux/slices/dataSlice";
 import { IUser } from "../utils/interfaces";
 import { useDate } from "../utils/hooks/useDate";
 import { useDuration } from "../utils/hooks/useDurations";
-
-interface IRenderProps {
-  days: number[];
-  dates: string[];
-  data: IUser[][];
-}
+import { addListener } from "@reduxjs/toolkit";
 
 const DetailsTable: FC = () => {
   const { datasets, users } = useAppSelector(getData);
+  const [isFull, setIsFull] = useState(false);
+  const [stateDay, setDay] = useState<number[]>([0]);
+  const [arr, setArr] = useState<ReactNode[]>([]);
 
-  const prepareData = () => {
+  const renderTable = (): ReactNode[] => {
     const days: number[] = [];
     const dates: string[] = [];
-    let data: IUser[][] = [];
 
-    datasets.forEach((datasets) => {
-      days.push(new Date(datasets[1].date).getDay() + 1);
+    datasets.forEach((datasets, i) => {
+      days.push(i + 1);
       dates.push(useDate("DD.MM.YYYY", datasets[1].date));
     });
 
-    users.forEach((users) => {
-      data.push(users);
-    });
+    if (users.length < 1) return [<h1 key={"123333"}>ERROR</h1>];
 
-    return renderTable({ days: days.sort(sortDays), dates, data });
-  };
-
-  const sortDays = (a: number, b: number) => {
-    if (a > b) return 1;
-    else if (a < b) return -1;
-    else return 0;
-  };
-
-  const renderTable = ({ days, dates, data }: IRenderProps): ReactNode => {
     return days.map((day, i) => (
-      <div>
+      <div key={i + "123"}>
         <div className="mt-12 mb-6">
           <p className="text-xl">
             <span className="font-bold">День {day}</span>, {dates[i]}
           </p>
         </div>
-        <table className="w-full">
+        <table className="w-full text-lg">
           <thead>
-            <td className="underline pb-6">Полное имя и никнейм</td>
-            <td className="underline pb-6">Когда пришли</td>
-            <td className="underline pb-6">Когда ушли</td>
-            <td className="underline pb-6 w-1/5">Сколько были подписчиками</td>
+            <tr>
+              <td className="underline pb-6">Полное имя и никнейм</td>
+              <td className="underline pb-6">Когда пришли</td>
+              <td className="underline pb-6">Когда ушли</td>
+              <td className="underline pb-6 w-1/5">
+                Сколько были подписчиками
+              </td>
+            </tr>
           </thead>
           <tbody>
-            {data[i].map((user) => {
+            {users[i].slice(0, isFull ? Infinity : 15).map((user) => {
               const { full_name, username, left_date, joined_date } = user;
               const name = username ? (
                 <>
@@ -80,7 +69,7 @@ const DetailsTable: FC = () => {
               )}`;
 
               return (
-                <tr className="h-8">
+                <tr key={Math.random() * 1000} className="h-8">
                   <td className="flex max-w-[40vw] w-[20vw] truncate">
                     <span className="truncate"> {name}</span>
                   </td>
@@ -96,7 +85,34 @@ const DetailsTable: FC = () => {
     ));
   };
 
-  return <div>{prepareData()}</div>;
+  useEffect(() => {
+    setArr(renderTable());
+  }, [users, datasets, isFull]);
+
+  const a = stateDay.at(-1)! + 1 >= datasets.length;
+  return (
+    <div className="flex flex-col">
+      {stateDay.map((day) => arr[day])}
+      <button
+        disabled={a}
+        className="button"
+        onClick={() => {
+          if (!isFull) {
+            setIsFull(true);
+            return;
+          }
+
+          setDay((state) => {
+            if (a) return state;
+
+            return [...state, state.at(-1)! + 1];
+          });
+        }}
+      >
+        {a ? "На этом все" : "Показать еще"}
+      </button>
+    </div>
+  );
 };
 
 export default DetailsTable;
