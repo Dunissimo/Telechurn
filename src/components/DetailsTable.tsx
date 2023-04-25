@@ -23,6 +23,12 @@ const DetailsTable: FC = () => {
 
     if (users.length < 1) return [<h1 key={"123333"}>ERROR</h1>];
 
+    const sortByLeftDate = (a: IUser, b: IUser) => {
+      if (a.left_date && !b.left_date) return -1;
+      else if (!a.left_date && b.left_date) return 1;
+      else return 0;
+    };
+
     return days.map((day, i) => (
       <div key={i + "123"}>
         <div className="mt-12 mb-6">
@@ -42,43 +48,46 @@ const DetailsTable: FC = () => {
             </tr>
           </thead>
           <tbody>
-            {users[i].slice(0, isFull ? Infinity : 15).map((user) => {
-              const { full_name, username, left_date, joined_date } = user;
-              const name = username ? (
-                <>
-                  {full_name}
-                  <a
-                    className="underline"
-                    target="_blank"
-                    href="https://t.me/${username}"
-                  >
-                    @{username}
-                  </a>
-                </>
-              ) : (
-                full_name
-              );
+            {users[i]
+              .slice(0, isFull ? Infinity : 15)
+              .sort(sortByLeftDate)
+              .map((user) => {
+                const { full_name, username, left_date, joined_date } = user;
+                const name = username ? (
+                  <>
+                    {full_name}
+                    <a
+                      className="underline"
+                      target="_blank"
+                      href="https://t.me/${username}"
+                    >
+                      @{username}
+                    </a>
+                  </>
+                ) : (
+                  full_name
+                );
 
-              const leftDate = left_date ? useDate("HH:mm", left_date) : "-";
-              const duration = left_date
-                ? useDuration(+new Date(left_date) - +new Date(joined_date))
-                : "-";
-              const joinedDate = `✅ ${useDate(
-                "HH:mm DD.MM.YYYYY",
-                joined_date
-              )}`;
+                const leftDate = left_date ? useDate("HH:mm", left_date) : "-";
+                const duration = left_date
+                  ? useDuration(+new Date(left_date) - +new Date(joined_date))
+                  : "-";
+                const joinedDate = `✅ ${useDate(
+                  "HH:mm DD.MM.YYYYY",
+                  joined_date
+                )}`;
 
-              return (
-                <tr key={Math.random() * 1000} className="h-8">
-                  <td className="flex max-w-[40vw] w-[20vw] truncate">
-                    <span className="truncate"> {name}</span>
-                  </td>
-                  <td>{joinedDate}</td>
-                  <td>🔻 {leftDate}</td>
-                  <td>{duration}</td>
-                </tr>
-              );
-            })}
+                return (
+                  <tr key={Math.random() * 1000} className="h-8">
+                    <td className="flex max-w-[40vw] w-[20vw] truncate">
+                      <span className="truncate"> {name}</span>
+                    </td>
+                    <td>{joinedDate}</td>
+                    <td>🔻 {leftDate}</td>
+                    <td>{duration}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>
