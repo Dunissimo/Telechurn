@@ -28,8 +28,7 @@ ChartJS.register(
   LineController,
   ChartDataLabels,
   Title,
-  Tooltip,
-  Legend
+  Tooltip
 );
 
 interface IProps {
@@ -70,7 +69,8 @@ const MyChart: FC<IProps> = ({}) => {
         align: "left",
         anchor: "start",
         clamp: true,
-        color: "black",
+        color: "white",
+        font: { size: 16, weight: "bolder" },
         backgroundColor: function (context: any) {
           return context.dataset.borderColor;
         },

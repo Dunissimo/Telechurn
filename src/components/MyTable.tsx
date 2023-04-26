@@ -17,7 +17,7 @@ const MyTable: FC<IProps> = ({}) => {
 
   const days: ReactNode[] = datasets.map((_, i) => (
     <td className="head-td" key={i + 1}>
-      День {i + 1}
+      {`День ${i + 1}`}
     </td>
   ));
 
@@ -26,10 +26,13 @@ const MyTable: FC<IProps> = ({}) => {
       const color = useColor(percentage).redShades;
 
       return (
-        <td className={`bg-[${color}]`} style={{ background: color }}>
-          <span>{percentage}%</span>
+        <td
+          className={`bg-[${color}] text-left pl-4`}
+          style={{ background: color }}
+        >
+          <span className="text-2xl">{percentage}%</span>
           <br />
-          <span>
+          <span className="text-base opacity-75 whitespace-nowrap pr-2">
             {totalUsers}, -{usersLeft}
           </span>
         </td>
@@ -49,7 +52,7 @@ const MyTable: FC<IProps> = ({}) => {
         >
           {date}
         </td>
-        <td className="text-center">
+        <td className="text-left pl-4">
           <Summary datasets={datasets} />
         </td>
         {...datasetsToRender[idx]}
@@ -62,7 +65,7 @@ const MyTable: FC<IProps> = ({}) => {
       <table className="main-table w-full mt-4">
         <thead>
           <tr>
-            <td className="head-td">Дата</td>
+            <td className="head-td text-center">Дата</td>
             <td className="head-td">Сводка</td>
             {days}
           </tr>

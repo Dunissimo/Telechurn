@@ -13,11 +13,11 @@ const Summary: FC<IProps> = ({ datasets, inline }) => {
 
     return (
       <>
-        <span>
+        <span className="whitespace-nowrap">
           👥{totalUsers}→{last.totalUsers}
         </span>
         {inline ? " " : <br />}
-        <span>
+        <span className="whitespace-nowrap">
           📉{percentage}% 🕑{length}
         </span>
       </>

@@ -8,7 +8,7 @@ body {
 }
 
 .main-table > thead > tr {
-  @apply uppercase text-[0.75em];
+  @apply uppercase;
 }
 .main-table .t-body-rows {
   @apply text-center;
@@ -22,7 +22,7 @@ body {
 }
 
 .head-td {
-  @apply p-4 bg-[#f2f7ff] font-bold text-center uppercase;
+  @apply whitespace-nowrap p-4 bg-[#f2f7ff] font-bold uppercase;
 }
 .head-td:first-child {
   border-top-left-radius: 10px;

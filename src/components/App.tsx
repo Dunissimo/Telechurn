@@ -90,6 +90,7 @@ const App: FC = () => {
 
           <FormSelect
             className="w-full md:w-1/2 h-[52px]"
+            style={{ backgroundSize: "35px 18px" }}
             onChange={(e) => handleChange(+e.currentTarget.value)}
           >
             <option value={7}>За последнюю неделю</option>
@@ -103,7 +104,7 @@ const App: FC = () => {
             При загрузке данных что-то пошло не так
           </Alert>
         ) : (
-          <Stack className="mb-12">
+          <Stack className="mb-12 text-sm md:text-base">
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Таблицей</Accordion.Header>
@@ -159,11 +160,6 @@ const App: FC = () => {
                 <p>
                   ↑ По вертикали сверху – относительное количество подписчиков.
                 </p>
-                <p className="flex items-center gap-2">
-                  <img src={cohort} alt="" className="w-[100px] border" />
-                  Можно нажимать на прямоугольник и номер когорты, чтобы
-                  добавлять/убирать ее из графика
-                </p>
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
@@ -182,6 +178,7 @@ const App: FC = () => {
           {isFetching ? <SkeletonTable withHead={false} /> : <DetailsTable />}
         </Stack>
       </Stack>
+
       <Footer />
     </section>
   );

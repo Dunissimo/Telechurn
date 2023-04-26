@@ -6,26 +6,26 @@ const Footer: FC = () => {
       <div className="bg-[#0F1A2C] relative z-[10000] mx-auto">
         <div className="container mx-auto">
           <div className="bg-[#0F1A2C] py-8 flex flex-col justify-center">
-            <div className="flex gap-4 mx-8 mb-4">
+            <div className="flex flex-col ultra-sm:flex-row justify-center ultra-sm:justify-start gap-2 ultra-sm:gap-4 mx-8 mb-4">
               <img
                 src="https://cohort-test.mywire.org/static/logo.png"
                 className="w-24 object-fit-cover"
               />
-              <div className="flex items-center justify-center ">
+              <div className="flex items-center">
                 <h1 className="text-[#FFCC34] text-2xl font-bold">
                   Есть идеи как улучшить?
                 </h1>
               </div>
             </div>
-            <p className="text-[#CBDEEC] mx-8  mb-4">
-              Если вы еще не в закрытой группе владельцев каналов, то{" "}
+            <p className="text-[#CBDEEC] mx-8 mb-4">
+              Если вы еще не в закрытой группе владельцев каналов, тo
               <span className="font-bold underline">
                 <a href="{{JOIN_LINK}}">вступите</a>
               </span>{" "}
               и поделитесь мыслями в чате по улучшению сервиса.
             </p>
-            <p className="text-[#CBDEEC] mx-8  mb-4">
-              Напишите основателю Диме личное сообщение{" "}
+            <p className="text-[#CBDEEC] mx-8 mb-4">
+              Напишите основателю Диме личное сообщение
               <span className="font-bold underline">
                 <a href="{{FOUNDER_LINK}}">в телеграме</a>
               </span>
