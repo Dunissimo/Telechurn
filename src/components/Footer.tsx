@@ -18,14 +18,14 @@ const Footer: FC = () => {
               </div>
             </div>
             <p className="text-[#CBDEEC] mx-8 mb-4">
-              Если вы еще не в закрытой группе владельцев каналов, тo
+              Если вы еще не в закрытой группе владельцев каналов, тo{" "}
               <span className="font-bold underline">
                 <a href="{{JOIN_LINK}}">вступите</a>
               </span>{" "}
               и поделитесь мыслями в чате по улучшению сервиса.
             </p>
             <p className="text-[#CBDEEC] mx-8 mb-4">
-              Напишите основателю Диме личное сообщение
+              Напишите основателю Диме личное сообщение{" "}
               <span className="font-bold underline">
                 <a href="{{FOUNDER_LINK}}">в телеграме</a>
               </span>
