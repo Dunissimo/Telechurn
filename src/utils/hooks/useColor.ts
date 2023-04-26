@@ -1,4 +1,4 @@
-export function useColor(percentage: number = 50) {
+export function useColors(percentage: number = 50, length: number) {
   const getRandomColor = () => {
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
@@ -9,6 +9,6 @@ export function useColor(percentage: number = 50) {
 
   return {
     redShades: `rgba(255, 0, 0, ${percentage}%`,
-    randomColor: getRandomColor(),
+    randomColors: new Array(length).fill(0).map(() => getRandomColor()),
   };
 }

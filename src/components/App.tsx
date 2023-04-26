@@ -14,6 +14,7 @@ import { getStatus, setStatus } from "../redux/slices/statusSlice";
 import { setData, setDatasets, setUsers } from "../redux/slices/dataSlice";
 import DetailsTable from "./DetailsTable";
 import Footer from "./Footer";
+import { useColors } from "../utils/hooks/useColor";
 
 const App: FC = () => {
   const dispatch = useAppDispatch();

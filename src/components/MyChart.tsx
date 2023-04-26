@@ -13,12 +13,13 @@ import {
 import { Chart } from "react-chartjs-2";
 import { ChartData } from "chart.js";
 import { IData, IDataset, IStatus } from "../utils/interfaces";
-import { useColor } from "../utils/hooks/useColor";
+import { useColors } from "../utils/hooks/useColor";
 import { Spinner } from "react-bootstrap";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { getStatus } from "../redux/slices/statusSlice";
 import { useAppSelector } from "../utils/hooks/redux";
 import { getData } from "../redux/slices/dataSlice";
+import { getColors } from "../redux/slices/colorsSlice";
 
 ChartJS.register(
   CategoryScale,
@@ -37,6 +38,7 @@ interface IProps {
 
 const MyChart: FC<IProps> = ({}) => {
   const { datasets: data } = useAppSelector(getData);
+  const COLORS = useAppSelector(getColors);
 
   const { isSuccess, isFetching } = useAppSelector(getStatus);
   const [percentages, setPercentages] = useState<number[][]>([]);
@@ -54,7 +56,7 @@ const MyChart: FC<IProps> = ({}) => {
   }, [data, isSuccess]);
 
   const colors = percentages.map((_, index) => {
-    return useColor(100).randomColor;
+    return COLORS[index];
   });
 
   const labels = percentages.map((_, index) => {
@@ -69,7 +71,7 @@ const MyChart: FC<IProps> = ({}) => {
         align: "left",
         anchor: "start",
         clamp: true,
-        color: "white",
+        color: "black",
         font: { size: 16, weight: "bolder" },
         backgroundColor: function (context: any) {
           return context.dataset.borderColor;
@@ -96,8 +98,8 @@ const MyChart: FC<IProps> = ({}) => {
       data: percentage.map((percentage) => percentage),
       borderWidth: 4,
       tension: 0.4,
-      borderColor: colors[index],
-      backgroundColor: colors[index],
+      borderColor: COLORS[index],
+      backgroundColor: COLORS[index],
       fill: false,
       pointRadius: 0,
     })),

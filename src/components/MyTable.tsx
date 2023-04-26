@@ -1,19 +1,27 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useGetStatisticsQuery } from "../redux/rtk";
-import { useColor } from "../utils/hooks/useColor";
+import { useColors } from "../utils/hooks/useColor";
 import { useDate } from "../utils/hooks/useDate";
 import { IData, IDataset, IUser } from "../utils/interfaces";
 import Summary from "./Summary";
 import { getData } from "../redux/slices/dataSlice";
-import { useAppSelector } from "../utils/hooks/redux";
+import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
+import { getColors, setColors } from "../redux/slices/colorsSlice";
 
 interface IProps {
   // datasets: IDataset[][];
 }
 
 const MyTable: FC<IProps> = ({}) => {
+  const dispatch = useAppDispatch();
   const { datasets } = useAppSelector(getData);
+  const colors = useColors(60, datasets.length).randomColors;
+
+  // Add the colors to Redux so that the schedule lines are the same color that the cells
+  useEffect(() => {
+    dispatch(setColors(colors));
+  }, [colors]);
 
   const days: ReactNode[] = datasets.map((_, i) => (
     <td className="head-td" key={i + 1}>
@@ -23,7 +31,7 @@ const MyTable: FC<IProps> = ({}) => {
 
   const datasetsToRender = datasets.map((datasets) =>
     datasets.slice(1).map(({ percentage, totalUsers, usersLeft }) => {
-      const color = useColor(percentage).redShades;
+      const color = useColors(percentage, 0).redShades;
 
       return (
         <td
@@ -42,7 +50,7 @@ const MyTable: FC<IProps> = ({}) => {
 
   const tBodyRows = datasets.map((datasets, idx) => {
     const date = useDate("DD.MM", datasets[1].date);
-    const randomColor = useColor(60).randomColor;
+    const randomColor = colors[idx];
 
     return (
       <tr key={idx} className="t-body-rows">
