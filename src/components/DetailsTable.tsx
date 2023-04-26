@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, Fragment, ReactNode, useEffect, useState } from "react";
 import { useAppSelector } from "../utils/hooks/redux";
 import { getCurrentIndex, getData } from "../redux/slices/dataSlice";
 import { useDate } from "../utils/hooks/useDate";
@@ -25,7 +25,7 @@ function getDayFromDate(
   return `День ${diffDays + 1}`;
 }
 
-const createRow = (user: IUser) => {
+const createRow = (user: IUser, i: number) => {
   const { full_name, username, joined_date, left_date } = user;
   const name = username ? (
     <>
@@ -43,7 +43,7 @@ const createRow = (user: IUser) => {
   );
 
   return (
-    <tr key={Math.ceil(Math.random() * 1000)}>
+    <tr key={i + Math.random() * 1000}>
       <td className="h-8 w-[50vw] truncate">{name}</td>
       <td className="h-8 whitespace-nowrap pr-4">
         ✅ {useDate("HH:mm DD.MM.YYYY", joined_date)}
@@ -60,6 +60,11 @@ const createRow = (user: IUser) => {
   );
 };
 
+interface IDay {
+  date: string;
+  rows: ReactNode[];
+}
+
 const DetailsTable: FC = () => {
   const { datasets, users } = useAppSelector(getData);
   const currentIndex = useAppSelector(getCurrentIndex);
@@ -67,8 +72,8 @@ const DetailsTable: FC = () => {
   const [isFull, setFull] = useState(false);
   const [daysToShow, setDays] = useState(0);
 
-  const days: any[] = [];
-  const headerDays: any[] = [];
+  const days: IDay[] = [];
+  const headerDays: string[] = [];
   const currentUsers = users[currentIndex!];
   const datesSet: Set<string> = new Set();
 
@@ -100,8 +105,8 @@ const DetailsTable: FC = () => {
         (user) =>
           useDate("DD/MM/YYYY", user.left_date ? user.left_date : "-") === date
       )
-      .forEach((user) => {
-        rows.push(createRow(user));
+      .forEach((user, i) => {
+        rows.push(createRow(user, i));
       });
 
     days.push({ date, rows });
@@ -109,8 +114,8 @@ const DetailsTable: FC = () => {
 
   currentUsers
     .filter((user) => user.left_date == null)
-    .forEach((user) => {
-      days[0].rows.push(createRow(user));
+    .forEach((user, i) => {
+      days[0].rows.push(createRow(user, i));
     });
 
   const isMore = daysToShow + 1 >= days.length;
@@ -132,26 +137,45 @@ const DetailsTable: FC = () => {
 
   return (
     <div className="text-lg flex flex-col">
-      {days
-        .filter((_, index) => index <= daysToShow)
-        .map((day: { date: string; rows: ReactNode[] }, i) => {
-          return (
-            <table key={i} className="w-full mt-12">
-              <thead>
-                <tr>
-                  <td className="pb-12">
-                    <b>{headerDays[i]},</b>
-                    {day.date}
-                  </td>
-                  <td className="underline pb-12">Когда пришли</td>
-                  <td className="underline pb-12">Когда ушли</td>
-                  <td className="underline pb-12">Сколько были подписчиками</td>
-                </tr>
-              </thead>
-              <tbody>{day.rows.slice(0, isFull ? Infinity : 15)}</tbody>
-            </table>
-          );
-        })}
+      {isFull ? (
+        days
+          .filter((_, index) => index <= daysToShow)
+          .map((day, i) => {
+            return (
+              <table key={i + Math.random() * 1000} className="w-full mt-12">
+                <thead>
+                  <tr>
+                    <td className="pb-12">
+                      <b>{headerDays[i]},</b>
+                      {day.date}
+                    </td>
+                    <td className="underline pb-12">Когда пришли</td>
+                    <td className="underline pb-12">Когда ушли</td>
+                    <td className="underline pb-12">
+                      Сколько были подписчиками
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>{day.rows}</tbody>
+              </table>
+            );
+          })
+      ) : (
+        <table key={Math.random() * 1000} className="w-full mt-12">
+          <thead>
+            <tr>
+              <td className="pb-12">
+                <b>{headerDays[0]},</b>
+                {days[0].date}
+              </td>
+              <td className="underline pb-12">Когда пришли</td>
+              <td className="underline pb-12">Когда ушли</td>
+              <td className="underline pb-12">Сколько были подписчиками</td>
+            </tr>
+          </thead>
+          <tbody>{days[0].rows.slice(0, 15)}</tbody>
+        </table>
+      )}
 
       {isMore || (
         <button className="button" onClick={handleClick}>
@@ -160,33 +184,6 @@ const DetailsTable: FC = () => {
       )}
     </div>
   );
-
-  // return (
-  //   <div className="text-lg flex flex-col">
-  //     {days.map((day: { date: string; rows: ReactNode[] }, i) => {
-  //       return (
-  //         <table className="w-full mt-12">
-  //           <thead>
-  //             <tr>
-  //               <td className="pb-12">
-  //                 <b>{headerDays[i]},</b>
-  //                 {day.date}
-  //               </td>
-  //               <td className="underline pb-12">Когда пришли</td>
-  //               <td className="underline pb-12">Когда ушли</td>
-  //               <td className="underline pb-12">Сколько были подписчиками</td>
-  //             </tr>
-  //           </thead>
-  //           <tbody>{day.rows}</tbody>
-  //         </table>
-  //       );
-  //     })}
-
-  //     <button className="button" onClick={handleClick} disabled={isMore}>
-  //       {isMore ? "Больше нет данных" : "Показать еще"}
-  //     </button>
-  //   </div>
-  // );
 };
 
 export default DetailsTable;
