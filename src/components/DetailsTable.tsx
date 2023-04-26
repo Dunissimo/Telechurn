@@ -137,45 +137,47 @@ const DetailsTable: FC = () => {
 
   return (
     <div className="text-lg flex flex-col">
-      {isFull ? (
-        days
-          .filter((_, index) => index <= daysToShow)
-          .map((day, i) => {
-            return (
-              <table key={i + Math.random() * 1000} className="w-full mt-12">
-                <thead>
-                  <tr>
-                    <td className="pb-12">
-                      <b>{headerDays[i]},</b>
-                      {day.date}
-                    </td>
-                    <td className="underline pb-12">Когда пришли</td>
-                    <td className="underline pb-12">Когда ушли</td>
-                    <td className="underline pb-12">
-                      Сколько были подписчиками
-                    </td>
-                  </tr>
-                </thead>
-                <tbody>{day.rows}</tbody>
-              </table>
-            );
-          })
-      ) : (
-        <table key={Math.random() * 1000} className="w-full mt-12">
-          <thead>
-            <tr>
-              <td className="pb-12">
-                <b>{headerDays[0]},</b>
-                {days[0].date}
-              </td>
-              <td className="underline pb-12">Когда пришли</td>
-              <td className="underline pb-12">Когда ушли</td>
-              <td className="underline pb-12">Сколько были подписчиками</td>
-            </tr>
-          </thead>
-          <tbody>{days[0].rows.slice(0, 15)}</tbody>
-        </table>
-      )}
+      <div className="overflow-x-auto">
+        {isFull ? (
+          days
+            .filter((_, index) => index <= daysToShow)
+            .map((day, i) => {
+              return (
+                <table key={i + Math.random() * 1000} className="w-full mt-12">
+                  <thead>
+                    <tr>
+                      <td className="pb-12">
+                        <b>{headerDays[i]},</b>
+                        {day.date}
+                      </td>
+                      <td className="underline pb-12">Когда пришли</td>
+                      <td className="underline pb-12">Когда ушли</td>
+                      <td className="underline pb-12">
+                        Сколько были подписчиками
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody>{day.rows}</tbody>
+                </table>
+              );
+            })
+        ) : (
+          <table key={Math.random() * 1000} className="w-full mt-12">
+            <thead>
+              <tr>
+                <td className="pb-12">
+                  <b>{headerDays[0]},</b>
+                  {days[0].date}
+                </td>
+                <td className="underline pb-12">Когда пришли</td>
+                <td className="underline pb-12">Когда ушли</td>
+                <td className="underline pb-12">Сколько были подписчиками</td>
+              </tr>
+            </thead>
+            <tbody>{days[0].rows.slice(0, 15)}</tbody>
+          </table>
+        )}
+      </div>
 
       {isMore || (
         <button className="button" onClick={handleClick}>

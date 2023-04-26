@@ -64,6 +64,7 @@ const MyChart: FC<IProps> = ({}) => {
 
   const options: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       datalabels: {
         align: "left",
@@ -102,8 +103,10 @@ const MyChart: FC<IProps> = ({}) => {
     })),
   };
 
+  // min-w-[${250 * percentages.length}px]
+
   return (
-    <div className="mt-4 w-full min-h-[500px] overflow-x-auto text-center">
+    <div className={`w-full lg:w-auto flex items-center justify-center`}>
       {isFetching ? (
         <Spinner
           className="w-[100px] h-[100px]"
@@ -113,7 +116,13 @@ const MyChart: FC<IProps> = ({}) => {
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       ) : (
-        <Chart type="line" height={100} data={chartData} options={options} />
+        <Chart
+          type="line"
+          height={300}
+          width={100}
+          data={chartData}
+          options={options}
+        />
       )}
     </div>
   );

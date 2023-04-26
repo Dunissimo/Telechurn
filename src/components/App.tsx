@@ -64,12 +64,8 @@ const App: FC = () => {
   return (
     <section className="App">
       <Stack className="container">
-        <Stack
-          direction="horizontal"
-          style={{ alignItems: "flex-start", gap: "4rem" }}
-          className="mt-12 mb-8"
-        >
-          <Accordion className="w-1/2">
+        <div className="flex flex-col md:flex-row mt-12 mb-8 items-start gap-4 md:gap-16">
+          <Accordion className="w-full md:w-1/2">
             <Accordion.Item eventKey="0">
               <Accordion.Header>Отток по времени</Accordion.Header>
               <Accordion.Body className="flex flex-col gap-3">
@@ -93,14 +89,14 @@ const App: FC = () => {
           </Accordion>
 
           <FormSelect
-            className="w-1/2 h-[52px]"
+            className="w-full md:w-1/2 h-[52px]"
             onChange={(e) => handleChange(+e.currentTarget.value)}
           >
             <option value={7}>За последнюю неделю</option>
             <option value={14}>За последние 2 недели</option>
             <option value={21}>За последние 3 недели</option>
           </FormSelect>
-        </Stack>
+        </div>
 
         {isError ? (
           <Alert key="danger" variant="danger">
@@ -144,7 +140,7 @@ const App: FC = () => {
         )}
 
         <Stack className="mb-12">
-          <Accordion>
+          <Accordion className="mb-4">
             <Accordion.Item eventKey="0">
               <Accordion.Header>Графиком</Accordion.Header>
               <Accordion.Body className="flex flex-col gap-3">
@@ -184,7 +180,6 @@ const App: FC = () => {
         <Stack className="mb-12">
           <DetailsHeader />
           {isFetching ? <SkeletonTable withHead={false} /> : <DetailsTable />}
-          {/* <MyDetails data={{ datasets, users }} /> */}
         </Stack>
       </Stack>
       <Footer />

@@ -36,11 +36,13 @@ const DetailsHeader: FC<IProps> = ({}) => {
   };
 
   return (
-    <Stack direction="horizontal">
-      <h2 className="w-1/2 text-2xl font-bold">Подробные события в когорте</h2>
+    <div className="flex flex-col md:flex-row gap-4 md:gap-0">
+      <h2 className="w-full md:w-1/2 text-2xl font-bold">
+        Подробные события в когорте
+      </h2>
 
       <FormSelect
-        className="w-auto bg-[#e3e9f4] text-[#394e6a] font-bold ms-auto"
+        className="w-auto bg-[#e3e9f4] text-[#394e6a] font-bold md:ms-auto"
         onChange={(e) => handleChange(+e.currentTarget.value)}
       >
         {isFetching ? (
@@ -49,7 +51,7 @@ const DetailsHeader: FC<IProps> = ({}) => {
           datasets.map((_, i) => renderOptions()[i][1])
         )}
       </FormSelect>
-    </Stack>
+    </div>
   );
 };
 
