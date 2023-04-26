@@ -43,10 +43,12 @@ const createRow = (user: IUser) => {
   );
 
   return (
-    <tr>
+    <tr key={Math.ceil(Math.random() * 1000)}>
       <td className="h-8 w-[50vw] truncate">{name}</td>
-      <td className="h-8">✅ {useDate("HH:mm DD.MM.YYYY", joined_date)}</td>
-      <td className="h-8">
+      <td className="h-8 whitespace-nowrap pr-4">
+        ✅ {useDate("HH:mm DD.MM.YYYY", joined_date)}
+      </td>
+      <td className="h-8 whitespace-nowrap pr-4">
         {left_date ? `🔻 ${useDate("HH:mm", left_date)}` : "-"}
       </td>
       <td className="h-8 w-[20vw]">
@@ -63,12 +65,14 @@ const DetailsTable: FC = () => {
   const currentIndex = useAppSelector(getCurrentIndex);
 
   const [isFull, setFull] = useState(false);
-  const [daysToShow, setDays] = useState<number[]>([0]);
+  const [daysToShow, setDays] = useState(0);
 
   const days: any[] = [];
   const headerDays: any[] = [];
   const currentUsers = users[currentIndex!];
   const datesSet: Set<string> = new Set();
+
+  useEffect(() => setDays(0), [currentIndex]);
 
   currentUsers.forEach((user) => {
     if (user.left_date) {
@@ -109,7 +113,7 @@ const DetailsTable: FC = () => {
       days[0].rows.push(createRow(user));
     });
 
-  const isMore = daysToShow.at(-1)! + 1 >= datasets.length;
+  const isMore = daysToShow + 1 >= days.length;
 
   const handleClick = () => {
     if (!isFull) {
@@ -120,7 +124,7 @@ const DetailsTable: FC = () => {
     setDays((state) => {
       if (isMore) return state;
 
-      return [...state, state.at(-1)! + 1];
+      return state + 1;
     });
   };
 
@@ -128,30 +132,61 @@ const DetailsTable: FC = () => {
 
   return (
     <div className="text-lg flex flex-col">
-      {days.map((day: { date: string; rows: ReactNode[] }, i) => {
-        return (
-          <table className="w-full mt-12">
-            <thead>
-              <tr>
-                <td className="pb-12">
-                  <b>{headerDays[i]},</b>
-                  {day.date}
-                </td>
-                <td className="underline pb-12">Когда пришли</td>
-                <td className="underline pb-12">Когда ушли</td>
-                <td className="underline pb-12">Сколько были подписчиками</td>
-              </tr>
-            </thead>
-            <tbody>{day.rows}</tbody>
-          </table>
-        );
-      })}
+      {days
+        .filter((_, index) => index <= daysToShow)
+        .map((day: { date: string; rows: ReactNode[] }, i) => {
+          return (
+            <table key={i} className="w-full mt-12">
+              <thead>
+                <tr>
+                  <td className="pb-12">
+                    <b>{headerDays[i]},</b>
+                    {day.date}
+                  </td>
+                  <td className="underline pb-12">Когда пришли</td>
+                  <td className="underline pb-12">Когда ушли</td>
+                  <td className="underline pb-12">Сколько были подписчиками</td>
+                </tr>
+              </thead>
+              <tbody>{day.rows.slice(0, isFull ? Infinity : 15)}</tbody>
+            </table>
+          );
+        })}
 
-      <button className="button" onClick={handleClick} disabled={isMore}>
-        {isMore ? "Больше нет данных" : "Показать еще"}
-      </button>
+      {isMore || (
+        <button className="button" onClick={handleClick}>
+          Показать еще
+        </button>
+      )}
     </div>
   );
+
+  // return (
+  //   <div className="text-lg flex flex-col">
+  //     {days.map((day: { date: string; rows: ReactNode[] }, i) => {
+  //       return (
+  //         <table className="w-full mt-12">
+  //           <thead>
+  //             <tr>
+  //               <td className="pb-12">
+  //                 <b>{headerDays[i]},</b>
+  //                 {day.date}
+  //               </td>
+  //               <td className="underline pb-12">Когда пришли</td>
+  //               <td className="underline pb-12">Когда ушли</td>
+  //               <td className="underline pb-12">Сколько были подписчиками</td>
+  //             </tr>
+  //           </thead>
+  //           <tbody>{day.rows}</tbody>
+  //         </table>
+  //       );
+  //     })}
+
+  //     <button className="button" onClick={handleClick} disabled={isMore}>
+  //       {isMore ? "Больше нет данных" : "Показать еще"}
+  //     </button>
+  //   </div>
+  // );
 };
 
 export default DetailsTable;
