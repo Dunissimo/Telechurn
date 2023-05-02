@@ -53,10 +53,6 @@ const MyChart: FC<IProps> = ({}) => {
     }
   }, [data, isSuccess]);
 
-  const colors = percentages.map((_, index) => {
-    return COLORS[index];
-  });
-
   const labels = percentages.map((_, index) => {
     return index + 1;
   });
@@ -103,7 +99,7 @@ const MyChart: FC<IProps> = ({}) => {
     })),
   };
 
-  // min-w-[${250 * percentages.length}px]
+  // TODO: refactor
 
   return (
     <div className={`w-full lg:w-auto flex items-center justify-center`}>
