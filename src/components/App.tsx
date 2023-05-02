@@ -15,6 +15,7 @@ import { setData, setDatasets, setUsers } from "../redux/slices/dataSlice";
 import DetailsTable from "./DetailsTable";
 import Footer from "./Footer";
 import { useColors } from "../utils/hooks/useColor";
+import ErrorBoundary from "./ErrorBoundary";
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
@@ -32,6 +33,8 @@ const App: FC = () => {
   });
 
   useEffect(() => {
+    console.log(isError);
+
     dispatch(
       setStatus({
         isFetching: apiFetching,
@@ -100,46 +103,48 @@ const App: FC = () => {
           </FormSelect>
         </div>
 
-        {isError ? (
-          <Alert key="danger" variant="danger">
-            При загрузке данных что-то пошло не так
-          </Alert>
-        ) : (
-          <Stack className="mb-12 text-sm md:text-base">
-            <Accordion>
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>Таблицей</Accordion.Header>
-                <Accordion.Body className="flex flex-col gap-3">
-                  <p>
-                    <span className="font-bold">Дата</span> – это когорта,
-                    пользователи, пришедшие за день.
-                  </p>
-                  <p>
-                    <span className="font-bold">Сводка:</span>
-                    <br />
-                    👥 пользователей пришло в первый день → в последний день,
-                    <br />
-                    📉 суммарный отток,
-                    <br />
-                    🕒 сколько дней прошло с первого дня когорты.
-                  </p>
-                  <p>
-                    <span className="font-bold">Ячейки по дням:</span>
-                    <br />
-                    % – отток относительно предыдущего дня (не первого). <br />
-                    Первая цифра во второй строке – количество пользователей.{" "}
-                    <br />
-                    Вторая цифра – количество ушедших пользователей. <br />
-                    Чем ярче 🟥 красный цвет – тем больше ушло подписчиков в
-                    этот период.
-                  </p>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
+        <Stack className="mb-12 text-sm md:text-base">
+          <Accordion className="mb-4">
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>Таблицей</Accordion.Header>
+              <Accordion.Body className="flex flex-col gap-3">
+                <p>
+                  <span className="font-bold">Дата</span> – это когорта,
+                  пользователи, пришедшие за день.
+                </p>
+                <p>
+                  <span className="font-bold">Сводка:</span>
+                  <br />
+                  👥 пользователей пришло в первый день → в последний день,
+                  <br />
+                  📉 суммарный отток,
+                  <br />
+                  🕒 сколько дней прошло с первого дня когорты.
+                </p>
+                <p>
+                  <span className="font-bold">Ячейки по дням:</span>
+                  <br />
+                  % – отток относительно предыдущего дня (не первого). <br />
+                  Первая цифра во второй строке – количество пользователей.{" "}
+                  <br />
+                  Вторая цифра – количество ушедших пользователей. <br />
+                  Чем ярче 🟥 красный цвет – тем больше ушло подписчиков в этот
+                  период.
+                </p>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
 
+          <ErrorBoundary
+            temp={
+              <Alert key="danger" variant="danger">
+                При загрузке данных что-то пошло не так
+              </Alert>
+            }
+          >
             {isFetching ? <SkeletonTable /> : <MyTable />}
-          </Stack>
-        )}
+          </ErrorBoundary>
+        </Stack>
 
         <Stack className="mb-12">
           <Accordion className="mb-4">
@@ -165,18 +170,28 @@ const App: FC = () => {
             </Accordion.Item>
           </Accordion>
 
-          {isError ? (
-            <Alert key="danger" variant="danger">
-              При загрузке данных что-то пошло не так
-            </Alert>
-          ) : (
+          <ErrorBoundary
+            temp={
+              <Alert key="danger" variant="danger">
+                При загрузке данных что-то пошло не так
+              </Alert>
+            }
+          >
             <MyChart />
-          )}
+          </ErrorBoundary>
         </Stack>
 
         <Stack className="mb-12">
           <DetailsHeader />
-          {isFetching ? <SkeletonTable withHead={false} /> : <DetailsTable />}
+          <ErrorBoundary
+            temp={
+              <Alert key="danger" variant="danger">
+                При загрузке данных что-то пошло не так
+              </Alert>
+            }
+          >
+            {isFetching ? <SkeletonTable withHead={false} /> : <DetailsTable />}
+          </ErrorBoundary>
         </Stack>
       </Stack>
 
