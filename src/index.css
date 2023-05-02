@@ -63,3 +63,7 @@ body {
   max-width: 400px;
   text-align: left;
 }
+
+.tooltip-trigger:hover ~ .tooltip-img {
+  @apply rotate-180 fill-black;
+}
