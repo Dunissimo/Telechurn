@@ -52,7 +52,7 @@ const MyTable: FC<IProps> = ({}) => {
     return (
       <tr key={idx} className="t-body-rows">
         <td
-          className={`font-bold text-[#394e6a] p-4 text-center bg-[${randomColor}]`}
+          className={`font-bold text-[#394e6a] p-3 text-center bg-[${randomColor}]`}
           style={{ background: randomColor }}
         >
           {date}

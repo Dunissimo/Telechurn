@@ -11,12 +11,10 @@ const ErrorBoundary: FC<IProps> = ({ children, temp = null }) => {
   const { isError } = useAppSelector(getStatus);
 
   if (isError) {
-    return <Fragment key={Math.ceil(Math.random() * 1000000)}>{temp}</Fragment>;
+    return <>{temp}</>;
   }
 
-  return (
-    <Fragment key={Math.ceil(Math.random() * 1000000)}>{children}</Fragment>
-  );
+  return <>{children}</>;
 };
 
 export default ErrorBoundary;

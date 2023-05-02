@@ -28,8 +28,10 @@ function getDayFromDate(
 const createRow = (user: IUser, i: number) => {
   const { full_name, username, joined_date, left_date } = user;
   const name = username ? (
-    <>
-      {full_name}{" "}
+    <div className="flex gap-2">
+      <div className="max-w-[20vw] truncate">
+        <span>{full_name}</span>
+      </div>{" "}
       <a
         className="underline"
         target="_blank"
@@ -37,7 +39,7 @@ const createRow = (user: IUser, i: number) => {
       >
         @{username}
       </a>
-    </>
+    </div>
   ) : (
     full_name
   );

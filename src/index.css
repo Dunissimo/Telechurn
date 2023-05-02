@@ -22,7 +22,7 @@ body {
 }
 
 .head-td {
-  @apply whitespace-nowrap p-4 bg-[#f2f7ff] font-bold uppercase;
+  @apply whitespace-nowrap p-4 bg-[#f2f7ff] font-bold uppercase text-[14px];
 }
 .head-td:first-child {
   border-top-left-radius: 10px;

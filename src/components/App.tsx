@@ -102,7 +102,7 @@ const App: FC = () => {
               placement="bottom"
             >
               <CaretDown
-                className="transition-all hover:rotate-180"
+                className="tooltip-img cursor-pointer transition-all duration-300 hover:rotate-180 hover:fill-[black]"
                 size="24"
               />
             </OverlayTrigger>
@@ -154,7 +154,7 @@ const App: FC = () => {
               placement="bottom"
             >
               <CaretDown
-                className="transition-all hover:rotate-180"
+                className="cursor-pointer transition-all duration-300 hover:rotate-180"
                 size="24"
               />
             </OverlayTrigger>
@@ -201,7 +201,7 @@ const App: FC = () => {
               placement="bottom"
             >
               <CaretDown
-                className="transition-all hover:rotate-180"
+                className="cursor-pointer transition-all duration-300 hover:rotate-180"
                 size="24"
               />
             </OverlayTrigger>
