@@ -1,13 +1,10 @@
-import { FC, ReactNode, useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
-import { useGetStatisticsQuery } from "../redux/rtk";
+import { FC, ReactNode, useEffect } from "react";
 import { useColors } from "../utils/hooks/useColor";
 import { useDate } from "../utils/hooks/useDate";
-import { IData, IDataset, IUser } from "../utils/interfaces";
 import Summary from "./Summary";
 import { getData } from "../redux/slices/dataSlice";
 import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
-import { getColors, setColors } from "../redux/slices/colorsSlice";
+import { setColors } from "../redux/slices/colorsSlice";
 
 interface IProps {
   // datasets: IDataset[][];

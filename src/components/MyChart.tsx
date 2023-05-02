@@ -3,7 +3,6 @@ import { ChartOptions, LineController } from "chart.js";
 import {
   CategoryScale,
   Chart as ChartJS,
-  Legend,
   LinearScale,
   LineElement,
   PointElement,
@@ -12,8 +11,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { ChartData } from "chart.js";
-import { IData, IDataset, IStatus } from "../utils/interfaces";
-import { useColors } from "../utils/hooks/useColor";
+import { IDataset } from "../utils/interfaces";
 import { Spinner } from "react-bootstrap";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { getStatus } from "../redux/slices/statusSlice";

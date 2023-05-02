@@ -2,19 +2,17 @@ import { FC, useEffect, useState } from "react";
 
 import { Stack, Accordion, FormSelect, Alert } from "react-bootstrap";
 import { useGetStatisticsQuery } from "../redux/rtk";
-import { IData, IDataset, IStatus, IUser } from "../utils/interfaces";
+import { IData } from "../utils/interfaces";
 import MyChart from "./MyChart";
 import MyTable from "./MyTable";
 import SkeletonTable from "./SkeletonTable";
 
-import cohort from "../assets/cohort.png";
 import DetailsHeader from "./DetailsHeader";
 import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
 import { getStatus, setStatus } from "../redux/slices/statusSlice";
-import { setData, setDatasets, setUsers } from "../redux/slices/dataSlice";
+import { setData } from "../redux/slices/dataSlice";
 import DetailsTable from "./DetailsTable";
 import Footer from "./Footer";
-import { useColors } from "../utils/hooks/useColor";
 import ErrorBoundary from "./ErrorBoundary";
 
 const App: FC = () => {
