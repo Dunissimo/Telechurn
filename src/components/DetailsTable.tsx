@@ -193,7 +193,7 @@ const DetailsTable: FC = () => {
       </div>
 
       {isMore || (
-        <button className="button" onClick={handleClick}>
+        <button className="showMore" onClick={handleClick}>
           Показать еще
         </button>
       )}

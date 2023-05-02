@@ -52,12 +52,14 @@ body {
   }
 }
 
-.button {
+.showMore {
   @apply self-center bg-gray-300 w-full md:w-64 md:px-6 my-12 py-2 rounded transition-all disabled:bg-gray-600 disabled:text-white;
 }
-.button:not(:disabled):hover {
-  @apply hover:bg-gray-400 hover:scale-[1.05];
+.showMore:not(:disabled):hover {
+  @apply hover:bg-gray-400;
 }
-.button:not(:disabled):active {
-  @apply active:scale-95;
+
+.my-tooltip > .tooltip-inner {
+  max-width: 400px;
+  text-align: left;
 }

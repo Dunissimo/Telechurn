@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, Fragment, ReactNode } from "react";
 import { useAppSelector } from "../utils/hooks/redux";
 import { getStatus } from "../redux/slices/statusSlice";
 
@@ -11,10 +11,12 @@ const ErrorBoundary: FC<IProps> = ({ children, temp = null }) => {
   const { isError } = useAppSelector(getStatus);
 
   if (isError) {
-    return <>{temp}</>;
+    return <Fragment key={Math.ceil(Math.random() * 1000000)}>{temp}</Fragment>;
   }
 
-  return <>{children}</>;
+  return (
+    <Fragment key={Math.ceil(Math.random() * 1000000)}>{children}</Fragment>
+  );
 };
 
 export default ErrorBoundary;
