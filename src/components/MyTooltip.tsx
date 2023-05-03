@@ -1,6 +1,6 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { CaretDown } from "react-bootstrap-icons";
+import { InfoCircle } from "react-bootstrap-icons";
 
 interface IProps {
   children: ReactNode;
@@ -10,23 +10,21 @@ interface IProps {
 
 const MyTooltip: FC<IProps> = ({ children, header, className }) => {
   return (
-    <div className={className}>
+    <div className={`${className}`}>
       <OverlayTrigger
-        placement="bottom"
+        placement={document.body.clientWidth < 768 ? "bottom" : "right"}
         overlay={<Tooltip className="my-tooltip">{children}</Tooltip>}
       >
         {({ ref, ...triggerHandler }) => (
-          <div className="flex items-center gap-2">
-            <h2
-              className="tooltip-trigger cursor-help text-2xl inline"
-              {...triggerHandler}
-            >
-              {header}
-            </h2>
-            <CaretDown
+          <div
+            className="tooltip-trigger cursor-help py-4 inline-flex items-center gap-2"
+            {...triggerHandler}
+          >
+            <h2 className="text-2xl inline">{header}</h2>
+            <InfoCircle
               // @ts-ignore
               ref={ref}
-              className="tooltip-img cursor-help transition-all duration-300"
+              className="tooltip-img transition-all duration-300"
               size="24"
             />
           </div>

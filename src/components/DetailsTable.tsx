@@ -48,15 +48,15 @@ const createRow = (user: IUser, i: number) => {
     <tr key={i + Math.random() * 1000}>
       <td className="h-8 w-[50vw] truncate">{name}</td>
       <td className="h-8 whitespace-nowrap pr-4">
-        ✅ {useDate("HH:mm DD.MM.YYYY", joined_date)}
-      </td>
-      <td className="h-8 whitespace-nowrap pr-4">
         {left_date ? `🔻 ${useDate("HH:mm", left_date)}` : "-"}
       </td>
       <td className="h-8 w-[20vw]">
         {left_date
           ? useDuration(+new Date(left_date) - +new Date(joined_date))
           : "-"}
+      </td>
+      <td className="h-8 whitespace-nowrap">
+        ✅ {useDate("HH:mm DD.MM.YYYY", joined_date)}
       </td>
     </tr>
   );
@@ -148,22 +148,22 @@ const DetailsTable: FC = () => {
   }) => {
     return (
       <>
-        <div className="mt-8 flex gap-2 items-end">
-          <b className="text-xl">{headerDay},</b>
+        <div className="mt-8 flex gap-2 items-end text-xl">
+          <b className="">{headerDay},</b>
           <p>{day.date}</p>
         </div>
         <table key={i + Math.random() * 1000} className="w-full">
           <thead>
             <tr>
               <td></td>
-              <td className="underline pb-4 pr-4 whitespace-nowrap ">
-                Когда пришли
-              </td>
-              <td className="underline pb-4 pr-4 whitespace-nowrap">
+              <td className="underline pb-4 pr-12 whitespace-nowrap">
                 Когда ушли
               </td>
-              <td className="underline pb-4 pr-4 whitespace-nowrap">
+              <td className="underline pb-4 pr-12 whitespace-nowrap">
                 Сколько были подписчиками
+              </td>
+              <td className="underline pb-4 whitespace-nowrap ">
+                Когда пришли
               </td>
             </tr>
           </thead>

@@ -1,15 +1,6 @@
 import { FC, useEffect, useState } from "react";
 
-import {
-  Stack,
-  Accordion,
-  Image,
-  FormSelect,
-  Alert,
-  OverlayTrigger,
-  Button,
-  Tooltip,
-} from "react-bootstrap";
+import { Stack, FormSelect, Alert } from "react-bootstrap";
 import { useGetStatisticsQuery } from "../redux/rtk";
 import { IData } from "../utils/interfaces";
 import MyChart from "./MyChart";
@@ -23,12 +14,11 @@ import { setData } from "../redux/slices/dataSlice";
 import DetailsTable from "./DetailsTable";
 import Footer from "./Footer";
 import ErrorBoundary from "./ErrorBoundary";
-import { InfoCircle, CaretDown } from "react-bootstrap-icons";
 import MyTooltip from "./MyTooltip";
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
-  const { isError, isFetching, isSuccess } = useAppSelector(getStatus);
+  const { isError, isFetching } = useAppSelector(getStatus);
   const [interval, setInterval] = useState(7);
 
   const {
@@ -42,8 +32,6 @@ const App: FC = () => {
   });
 
   useEffect(() => {
-    console.log(isError);
-
     dispatch(
       setStatus({
         isFetching: apiFetching,
@@ -76,9 +64,9 @@ const App: FC = () => {
 
   return (
     <section className="App">
-      <Stack className="container">
-        <div className="mt-12 mb-8">
-          <MyTooltip header="Отток по времени" className="mb-4">
+      <Stack className="px-3 md:px-auto md:mx-auto md:container">
+        <div className="mt-4 flex flex-col md:flex-row md:items-center">
+          <MyTooltip header="Отток по времени" className="md:w-1/2">
             <p className="pb-2">
               Подходит для тех, у кого не накладываются рекламные активности, а
               пользователи приходят с внешних источников и не отслеживаются
@@ -97,7 +85,7 @@ const App: FC = () => {
           </MyTooltip>
 
           <FormSelect
-            className="w-auto h-[52px] pr-12"
+            className="w-auto bg-[#e3e9f4] text-[#394e6a] font-bold md:ms-auto h-[52px] pr-10"
             style={{ backgroundSize: "35px 18px" }}
             onChange={(e) => handleChange(+e.currentTarget.value)}
           >
@@ -108,7 +96,7 @@ const App: FC = () => {
         </div>
 
         <Stack className="mb-12 text-sm md:text-base">
-          <MyTooltip header="Таблицей" className="mb-4">
+          <MyTooltip header="Таблицей">
             <p className="pb-2">
               <span className="font-bold">Дата</span> – это когорта,
               пользователи, пришедшие за день.
@@ -145,7 +133,7 @@ const App: FC = () => {
         </Stack>
 
         <Stack className="mb-12">
-          <MyTooltip header="Таблицей" className="mb-4">
+          <MyTooltip header="Графиком">
             <p className="pb-2">
               На графике показан отток подписчиков в когортах по дням. Для
               наглядного сравнения количество подписчиков переведено в проценты.
