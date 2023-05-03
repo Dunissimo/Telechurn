@@ -86,7 +86,7 @@ const MyChart: FC<IProps> = ({}) => {
   };
 
   const chartData: ChartData = {
-    labels: [...labels, labels?.length + 1, labels?.length + 2],
+    labels: ["", ...labels, labels?.length + 1],
     datasets: percentages.map((percentage, index) => ({
       label: `Когорта ${index + 1}`,
       data: percentage.map((percentage) => percentage),

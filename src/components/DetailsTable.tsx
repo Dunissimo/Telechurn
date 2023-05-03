@@ -11,7 +11,7 @@ function getDayFromDate(
   dateString: string
 ) {
   // create Date objects from the input strings
-  const dateParts = dateString.split("/");
+  const dateParts = dateString.split(".");
   const dateObject = new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0]);
   const startingDay = datasets[currentIndex ? currentIndex : 0][1].date;
   const startingDayObject = new Date(startingDay);
@@ -83,7 +83,7 @@ const DetailsTable: FC = () => {
 
   currentUsers.forEach((user) => {
     if (user.left_date) {
-      const dateString = useDate("DD/MM/YYYY", user.left_date);
+      const dateString = useDate("DD.MM.YYYY", user.left_date);
 
       if (!datesSet.has(dateString)) {
         datesSet.add(dateString);
@@ -92,8 +92,8 @@ const DetailsTable: FC = () => {
   });
 
   const uniqueDates = Array.from(datesSet).sort((a, b) => {
-    const dateA = new Date(a.split("/").reverse().join("-")).getTime();
-    const dateB = new Date(b.split("/").reverse().join("-")).getTime();
+    const dateA = new Date(a.split(".").reverse().join("-")).getTime();
+    const dateB = new Date(b.split(".").reverse().join("-")).getTime();
     return dateA - dateB;
   });
 
@@ -105,7 +105,7 @@ const DetailsTable: FC = () => {
     currentUsers
       .filter(
         (user) =>
-          useDate("DD/MM/YYYY", user.left_date ? user.left_date : "-") === date
+          useDate("DD.MM.YYYY", user.left_date ? user.left_date : "-") === date
       )
       .forEach((user, i) => {
         rows.push(createRow(user, i));
@@ -149,7 +149,7 @@ const DetailsTable: FC = () => {
     return (
       <>
         <div className="mt-8 flex gap-2 items-end text-xl">
-          <b className="">{headerDay},</b>
+          <b className="">{headerDay}</b>
           <p>{day.date}</p>
         </div>
         <table key={i + Math.random() * 1000} className="w-full">
