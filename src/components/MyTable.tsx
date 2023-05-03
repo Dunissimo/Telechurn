@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect } from "react";
-import { useColors } from "../utils/hooks/useColor";
+import { useRandomColors, useRedTone } from "../utils/hooks/useColor";
 import { useDate } from "../utils/hooks/useDate";
 import Summary from "./Summary";
 import { getData } from "../redux/slices/dataSlice";
@@ -13,7 +13,7 @@ interface IProps {
 const MyTable: FC<IProps> = ({}) => {
   const dispatch = useAppDispatch();
   const { datasets } = useAppSelector(getData);
-  const colors = useColors(60, datasets.length).randomColors;
+  const colors = useRandomColors(60, datasets.length).randomColors;
 
   // Add the colors to Redux so that the schedule lines are the same color that the cells
   useEffect(() => {
@@ -26,13 +26,17 @@ const MyTable: FC<IProps> = ({}) => {
     </td>
   ));
 
-  const datasetsToRender = datasets.map((datasets) =>
-    datasets.slice(1).map(({ percentage, totalUsers, usersLeft }) => {
-      const color = useColors(percentage, 0).redShades;
+  const redTones = useRedTone(datasets);
+
+  const datasetsToRender = datasets.map((datasets, i) =>
+    datasets.slice(1).map((dataset, j) => {
+      const { totalUsers, usersLeft, percentage } = dataset;
+
+      const color = redTones[i][j];
 
       return (
         <td
-          className={`bg-[${color}] text-left pl-4`}
+          className={`bg-[${color}] text-left pl-4 py-2 pr-3`}
           style={{ background: color }}
         >
           <span className="text-2xl">{percentage}%</span>
@@ -52,7 +56,7 @@ const MyTable: FC<IProps> = ({}) => {
     return (
       <tr key={idx} className="t-body-rows">
         <td
-          className={`font-bold text-[#394e6a] p-3 text-center bg-[${randomColor}]`}
+          className={`font-bold text-[#394e6a] p-3 text-center`}
           style={{ background: randomColor }}
         >
           {date}
