@@ -20,7 +20,7 @@ const MyTooltip: FC<IProps> = ({ children, header, className }) => {
             className="tooltip-trigger cursor-help py-4 inline-flex items-center gap-2"
             {...triggerHandler}
           >
-            <h2 className="text-2xl inline">{header}</h2>
+            <h2 className="text-2xl font-medium inline">{header}</h2>
             <InfoCircle
               // @ts-ignore
               ref={ref}

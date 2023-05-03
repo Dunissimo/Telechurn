@@ -63,29 +63,28 @@ const App: FC = () => {
   };
 
   return (
-    <section className="App">
+    <section className="App font-sans">
       <Stack className="px-3 md:px-auto md:mx-auto md:container">
-        <div className="mt-4 flex flex-col md:flex-row md:items-center">
-          <MyTooltip header="Отток по времени" className="md:w-1/2">
-            <p className="pb-2">
-              Подходит для тех, у кого не накладываются рекламные активности, а
-              пользователи приходят с внешних источников и не отслеживаются
-              пригласительными ссылками.
-            </p>
-            <p className="pb-2">
-              Для анализа определяется группа пользователей (когорта) по
-              интервалу времени (день или больше), и анализируется их движение
-              по дням.
-            </p>
-            <p>
-              Здоровый подписчик будет читать ваш канал долго, без резких
-              движений. Короткий жизненный цикл и массовые движения – признак
-              некачественной аудитории (боты, накрутки).
-            </p>
-          </MyTooltip>
-
+        {/* <div className="mt-4 flex flex-col md:flex-row"> */}
+        <MyTooltip header="Отток по времени" className="md:w-1/2">
+          <p className="pb-2">
+            Подходит для тех, у кого не накладываются рекламные активности, а
+            пользователи приходят с внешних источников и не отслеживаются
+            пригласительными ссылками.
+          </p>
+          <p className="pb-2">
+            Для анализа определяется группа пользователей (когорта) по интервалу
+            времени (день или больше), и анализируется их движение по дням.
+          </p>
+          <p>
+            Здоровый подписчик будет читать ваш канал долго, без резких
+            движений. Короткий жизненный цикл и массовые движения – признак
+            некачественной аудитории (боты, накрутки).
+          </p>
+        </MyTooltip>
+        <div className="flex md:justify-end">
           <FormSelect
-            className="w-auto bg-[#e3e9f4] text-[#394e6a] font-bold md:ms-auto h-[52px] pr-10"
+            className="w-auto self-end bg-[#e3e9f4] text-[#394e6a] font-bold md:ms-auto h-[52px] pr-10"
             style={{ backgroundSize: "35px 18px" }}
             onChange={(e) => handleChange(+e.currentTarget.value)}
           >
@@ -94,6 +93,7 @@ const App: FC = () => {
             <option value={21}>За последние 3 недели</option>
           </FormSelect>
         </div>
+        {/* </div> */}
 
         <Stack className="mb-12 text-sm md:text-base">
           <MyTooltip header="Таблицей">
