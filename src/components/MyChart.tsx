@@ -65,6 +65,7 @@ const MyChart: FC<IProps> = ({}) => {
         display: true,
         beginAtZero: true,
         type: "linear",
+        grace: "10%",
         ticks: {
           callback: function (value, index, ticks) {
             return value + "%";
