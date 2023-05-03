@@ -71,7 +71,7 @@ const MyChart: FC<IProps> = ({}) => {
           return context.dataset.borderColor;
         },
         padding: 4,
-        offset: 0,
+        offset: -40,
         formatter: function (value: any, context: any) {
           let index = context.dataIndex;
           let length = context.dataset.data.length;
@@ -86,7 +86,7 @@ const MyChart: FC<IProps> = ({}) => {
   };
 
   const chartData: ChartData = {
-    labels: [...labels, labels?.length],
+    labels: [...labels, labels?.length + 1, labels?.length + 2],
     datasets: percentages.map((percentage, index) => ({
       label: `Когорта ${index + 1}`,
       data: percentage.map((percentage) => percentage),
