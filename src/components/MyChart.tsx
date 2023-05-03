@@ -64,6 +64,7 @@ const MyChart: FC<IProps> = ({}) => {
       y: {
         display: true,
         beginAtZero: true,
+        max: 100,
         type: "linear",
         grace: "10%",
         ticks: {
