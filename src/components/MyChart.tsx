@@ -60,6 +60,18 @@ const MyChart: FC<IProps> = ({}) => {
   const options: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    scales: {
+      y: {
+        display: true,
+        beginAtZero: true,
+        type: "linear",
+        ticks: {
+          callback: function (value, index, ticks) {
+            return value + "%";
+          },
+        },
+      },
+    },
     plugins: {
       datalabels: {
         align: "left",
