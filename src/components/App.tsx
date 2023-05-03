@@ -84,7 +84,7 @@ const App: FC = () => {
         </MyTooltip>
         <div className="flex md:justify-end">
           <FormSelect
-            className="w-auto self-end bg-[#e3e9f4] text-[#394e6a] font-bold md:ms-auto h-[52px] pr-10"
+            className="md:w-auto self-end bg-[#e3e9f4] text-[#394e6a] font-bold md:ms-auto h-[52px] pr-10"
             style={{ backgroundSize: "35px 18px" }}
             onChange={(e) => handleChange(+e.currentTarget.value)}
           >
