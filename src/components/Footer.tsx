@@ -45,7 +45,7 @@ const Footer: FC = () => {
               подписчика и расширенной информацией о ссылке.
             </p>
             <p className="text-left text-[#0F1A2C] max-w-2xl mb-4">
-              Напишите основателю Диме личное сообщение в{" "}
+              Напишите основателю Диме личное сообщение{" "}
               <span className="font-bold underline">
                 <a href="{{FOUNDER_LINK}}">в телеграме</a>
               </span>
