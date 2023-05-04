@@ -1,24 +1,24 @@
 import { FC, useEffect, useState } from "react";
 
-import { Stack, Accordion, FormSelect, Alert } from "react-bootstrap";
+import { Stack, FormSelect, Alert } from "react-bootstrap";
 import { useGetStatisticsQuery } from "../redux/rtk";
-import { IData, IDataset, IStatus, IUser } from "../utils/interfaces";
+import { IData } from "../utils/interfaces";
 import MyChart from "./MyChart";
 import MyTable from "./MyTable";
 import SkeletonTable from "./SkeletonTable";
 
-import cohort from "../assets/cohort.png";
 import DetailsHeader from "./DetailsHeader";
 import { useAppDispatch, useAppSelector } from "../utils/hooks/redux";
 import { getStatus, setStatus } from "../redux/slices/statusSlice";
-import { setData, setDatasets, setUsers } from "../redux/slices/dataSlice";
+import { setData } from "../redux/slices/dataSlice";
 import DetailsTable from "./DetailsTable";
 import Footer from "./Footer";
-import { useColors } from "../utils/hooks/useColor";
+import ErrorBoundary from "./ErrorBoundary";
+import MyTooltip from "./MyTooltip";
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
-  const { isError, isFetching, isSuccess } = useAppSelector(getStatus);
+  const { isError, isFetching } = useAppSelector(getStatus);
   const [interval, setInterval] = useState(7);
 
   const {
@@ -63,34 +63,28 @@ const App: FC = () => {
   };
 
   return (
-    <section className="App">
-      <Stack className="container">
-        <div className="flex flex-col md:flex-row mt-12 mb-8 items-start gap-4 md:gap-16">
-          <Accordion className="w-full md:w-1/2">
-            <Accordion.Item eventKey="0">
-              <Accordion.Header>Отток по времени</Accordion.Header>
-              <Accordion.Body className="flex flex-col gap-3">
-                <p>
-                  Подходит для тех, у кого не накладываются рекламные
-                  активности, а пользователи приходят с внешних источников и не
-                  отслеживаются пригласительными ссылками.
-                </p>
-                <p>
-                  Для анализа определяется группа пользователей (когорта) по
-                  интервалу времени (день или больше), и анализируется их
-                  движение по дням.
-                </p>
-                <p>
-                  Здоровый подписчик будет читать ваш канал долго, без резкий
-                  движений. Короткий жизненный цикл и массовые движения –
-                  признак некачественной аудитории (боты, накрутки).
-                </p>
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
-
+    <section className="App font-sans">
+      <Stack className="px-3 md:px-auto md:mx-auto md:container">
+        {/* <div className="mt-4 flex flex-col md:flex-row"> */}
+        <MyTooltip header="Отток по времени" className="md:w-1/2">
+          <p className="pb-2">
+            Подходит для тех, у кого не накладываются рекламные активности, а
+            пользователи приходят с внешних источников и не отслеживаются
+            пригласительными ссылками.
+          </p>
+          <p className="pb-2">
+            Для анализа определяется группа пользователей (когорта) по интервалу
+            времени (день или больше), и анализируется их движение по дням.
+          </p>
+          <p>
+            Здоровый подписчик будет читать ваш канал долго, без резких
+            движений. Короткий жизненный цикл и массовые движения – признак
+            некачественной аудитории (боты, накрутки).
+          </p>
+        </MyTooltip>
+        <div className="flex md:justify-end">
           <FormSelect
-            className="w-full md:w-1/2 h-[52px]"
+            className="md:w-auto self-end bg-[#e3e9f4] text-[#394e6a] font-bold md:ms-auto h-[52px] pr-10"
             style={{ backgroundSize: "35px 18px" }}
             onChange={(e) => handleChange(+e.currentTarget.value)}
           >
@@ -99,84 +93,87 @@ const App: FC = () => {
             <option value={21}>За последние 3 недели</option>
           </FormSelect>
         </div>
+        {/* </div> */}
 
-        {isError ? (
-          <Alert key="danger" variant="danger">
-            При загрузке данных что-то пошло не так
-          </Alert>
-        ) : (
-          <Stack className="mb-12 text-sm md:text-base">
-            <Accordion>
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>Таблицей</Accordion.Header>
-                <Accordion.Body className="flex flex-col gap-3">
-                  <p>
-                    <span className="font-bold">Дата</span> – это когорта,
-                    пользователи, пришедшие за день.
-                  </p>
-                  <p>
-                    <span className="font-bold">Сводка:</span>
-                    <br />
-                    👥 пользователей пришло в первый день → в последний день,
-                    <br />
-                    📉 суммарный отток,
-                    <br />
-                    🕒 сколько дней прошло с первого дня когорты.
-                  </p>
-                  <p>
-                    <span className="font-bold">Ячейки по дням:</span>
-                    <br />
-                    % – отток относительно предыдущего дня (не первого). <br />
-                    Первая цифра во второй строке – количество пользователей.{" "}
-                    <br />
-                    Вторая цифра – количество ушедших пользователей. <br />
-                    Чем ярче 🟥 красный цвет – тем больше ушло подписчиков в
-                    этот период.
-                  </p>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
+        <Stack className="mb-12 text-sm md:text-base">
+          <MyTooltip header="Таблицей">
+            <p className="pb-2">
+              <span className="font-bold">Дата</span> – это когорта,
+              пользователи, пришедшие за день.
+            </p>
+            <p className="pb-2">
+              <span className="font-bold">Сводка:</span>
+              <br />
+              👥 пользователей пришло в первый день → в последний день,
+              <br />
+              📉 суммарный отток,
+              <br />
+              🕒 сколько дней прошло с первого дня когорты.
+            </p>
+            <p>
+              <span className="font-bold">Ячейки по дням:</span>
+              <br />
+              % – отток относительно предыдущего дня (не первого). <br />
+              Первая цифра во второй строке – количество пользователей. <br />
+              Вторая цифра – количество ушедших пользователей. <br />
+              Чем ярче 🟥 красный цвет – тем больше ушло подписчиков в этот
+              период.
+            </p>
+          </MyTooltip>
 
+          <ErrorBoundary
+            temp={
+              <Alert key="danger" variant="danger">
+                При загрузке данных что-то пошло не так
+              </Alert>
+            }
+          >
             {isFetching ? <SkeletonTable /> : <MyTable />}
-          </Stack>
-        )}
+          </ErrorBoundary>
+        </Stack>
 
         <Stack className="mb-12">
-          <Accordion className="mb-4">
-            <Accordion.Item eventKey="0">
-              <Accordion.Header>Графиком</Accordion.Header>
-              <Accordion.Body className="flex flex-col gap-3">
-                <p>
-                  На графике показан отток подписчиков в когортах по дням. Для
-                  наглядного сравнения количество подписчиков переведено в
-                  проценты.
-                </p>
-                <p>
-                  🧠 Чем более горизонтальный график без резких падений вниз,
-                  тем качественнее аудитория. Чем быстрее падает график вниз –
-                  тем хуже аудитория, слив бюджета.
-                </p>
-                <p>Значение в прямоугольнике – общий отток в когорте.</p>
-                <p>→ По горизонтали – дни жизни когорты.</p>
-                <p>
-                  ↑ По вертикали сверху – относительное количество подписчиков.
-                </p>
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
+          <MyTooltip header="Графиком">
+            <p className="pb-2">
+              На графике показан отток подписчиков в когортах по дням. Для
+              наглядного сравнения количество подписчиков переведено в проценты.
+            </p>
+            <p className="pb-2">
+              🧠 Чем более горизонтальный график без резких падений вниз, тем
+              качественнее аудитория. Чем быстрее падает график вниз – тем хуже
+              аудитория, слив бюджета.
+            </p>
+            <p className="pb-2">
+              Значение в прямоугольнике – общий отток в когорте.
+            </p>
+            <p className="pb-2">→ По горизонтали – дни жизни когорты.</p>
+            <p className="pb-2">
+              ↑ По вертикали сверху – относительное количество подписчиков.
+            </p>
+          </MyTooltip>
 
-          {isError ? (
-            <Alert key="danger" variant="danger">
-              При загрузке данных что-то пошло не так
-            </Alert>
-          ) : (
+          <ErrorBoundary
+            temp={
+              <Alert key="danger" variant="danger">
+                При загрузке данных что-то пошло не так
+              </Alert>
+            }
+          >
             <MyChart />
-          )}
+          </ErrorBoundary>
         </Stack>
 
         <Stack className="mb-12">
           <DetailsHeader />
-          {isFetching ? <SkeletonTable withHead={false} /> : <DetailsTable />}
+          <ErrorBoundary
+            temp={
+              <Alert key="danger" variant="danger">
+                При загрузке данных что-то пошло не так
+              </Alert>
+            }
+          >
+            {isFetching ? <SkeletonTable withHead={false} /> : <DetailsTable />}
+          </ErrorBoundary>
         </Stack>
       </Stack>
 

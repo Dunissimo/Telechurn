@@ -11,7 +11,7 @@ function getDayFromDate(
   dateString: string
 ) {
   // create Date objects from the input strings
-  const dateParts = dateString.split("/");
+  const dateParts = dateString.split(".");
   const dateObject = new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0]);
   const startingDay = datasets[currentIndex ? currentIndex : 0][1].date;
   const startingDayObject = new Date(startingDay);
@@ -28,8 +28,10 @@ function getDayFromDate(
 const createRow = (user: IUser, i: number) => {
   const { full_name, username, joined_date, left_date } = user;
   const name = username ? (
-    <>
-      {full_name}{" "}
+    <div className="flex gap-2">
+      <div className="max-w-[20vw] truncate">
+        <span>{full_name}</span>
+      </div>{" "}
       <a
         className="underline"
         target="_blank"
@@ -37,7 +39,7 @@ const createRow = (user: IUser, i: number) => {
       >
         @{username}
       </a>
-    </>
+    </div>
   ) : (
     full_name
   );
@@ -46,15 +48,15 @@ const createRow = (user: IUser, i: number) => {
     <tr key={i + Math.random() * 1000}>
       <td className="h-8 w-[50vw] truncate">{name}</td>
       <td className="h-8 whitespace-nowrap pr-4">
-        ✅ {useDate("HH:mm DD.MM.YYYY", joined_date)}
-      </td>
-      <td className="h-8 whitespace-nowrap pr-4">
         {left_date ? `🔻 ${useDate("HH:mm", left_date)}` : "-"}
       </td>
       <td className="h-8 w-[20vw]">
         {left_date
           ? useDuration(+new Date(left_date) - +new Date(joined_date))
           : "-"}
+      </td>
+      <td className="h-8 whitespace-nowrap">
+        ✅ {useDate("HH:mm DD.MM.YYYY", joined_date)}
       </td>
     </tr>
   );
@@ -81,7 +83,7 @@ const DetailsTable: FC = () => {
 
   currentUsers.forEach((user) => {
     if (user.left_date) {
-      const dateString = useDate("DD/MM/YYYY", user.left_date);
+      const dateString = useDate("DD.MM.YYYY", user.left_date);
 
       if (!datesSet.has(dateString)) {
         datesSet.add(dateString);
@@ -90,8 +92,8 @@ const DetailsTable: FC = () => {
   });
 
   const uniqueDates = Array.from(datesSet).sort((a, b) => {
-    const dateA = new Date(a.split("/").reverse().join("-")).getTime();
-    const dateB = new Date(b.split("/").reverse().join("-")).getTime();
+    const dateA = new Date(a.split(".").reverse().join("-")).getTime();
+    const dateB = new Date(b.split(".").reverse().join("-")).getTime();
     return dateA - dateB;
   });
 
@@ -103,7 +105,7 @@ const DetailsTable: FC = () => {
     currentUsers
       .filter(
         (user) =>
-          useDate("DD/MM/YYYY", user.left_date ? user.left_date : "-") === date
+          useDate("DD.MM.YYYY", user.left_date ? user.left_date : "-") === date
       )
       .forEach((user, i) => {
         rows.push(createRow(user, i));
@@ -146,22 +148,22 @@ const DetailsTable: FC = () => {
   }) => {
     return (
       <>
-        <div className="mt-8 flex gap-2 items-end">
-          <b className="text-xl">{headerDay},</b>
+        <div className="mt-8 flex gap-2 items-end text-xl">
+          <b className="">{headerDay}</b>
           <p>{day.date}</p>
         </div>
         <table key={i + Math.random() * 1000} className="w-full">
           <thead>
             <tr>
               <td></td>
-              <td className="underline pb-4 pr-4 whitespace-nowrap ">
-                Когда пришли
-              </td>
-              <td className="underline pb-4 pr-4 whitespace-nowrap">
+              <td className="underline pb-4 pr-12 whitespace-nowrap">
                 Когда ушли
               </td>
-              <td className="underline pb-4 pr-4 whitespace-nowrap">
+              <td className="underline pb-4 pr-12 whitespace-nowrap">
                 Сколько были подписчиками
+              </td>
+              <td className="underline pb-4 whitespace-nowrap ">
+                Когда пришли
               </td>
             </tr>
           </thead>
@@ -193,7 +195,7 @@ const DetailsTable: FC = () => {
       </div>
 
       {isMore || (
-        <button className="button" onClick={handleClick}>
+        <button className="showMore" onClick={handleClick}>
           Показать еще
         </button>
       )}
